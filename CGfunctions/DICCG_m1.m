@@ -1,5 +1,5 @@
 
-function[x,flag,relres,ii,resvec]=DICCG(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+function[x,flag,relres,ii,resvec]=DICCG_m(A,b,Z,tol,maxit,M1,M2,x0,varargin)
 %DPCG  Deflated Preconditioned Conjugate Gradients Method.
 %   X = DPCG(A,B,Z) attempts to solve the system of linear equations PA*X=PB for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
@@ -73,7 +73,7 @@ if strcmp(atype,'matrix')
     if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
-    if ~isequal(size(Z,1),m) 
+    if ~isequal(size(Z,1),m)
         error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
     end
 else

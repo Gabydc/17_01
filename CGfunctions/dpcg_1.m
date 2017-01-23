@@ -1,52 +1,53 @@
-function [x,flag,relres,iter,resvec] = dpcg(A,b,Z,tol,maxit,M1,M2,x0,varargin)
-%PCG   Preconditioned Conjugate Gradients Method.
-%   X = PCG(A,B,Z) attempts to solve the deflated system of linear equations A*X=B for
+function [x,flag,relres,ii,resvec] = dpcg(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+%DPCG  Deflated Preconditioned Conjugate Gradients Method.
+%   X = DPCG(A,B,Z) attempts to solve the system of linear equations PA*X=PB for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
-%   definite and the right hand side column vector B must have length N.
+%   definite, the right hand side column vector B must have length N, the 
+%   matrix X must have N rows.
 %
-%   X = PCG(AFUN,B,Z) accepts a function handle AFUN instead of the matrix A.
+%   X = DPCG(AFUN,B) accepts a function handle AFUN instead of the matrix A.
 %   AFUN(X) accepts a vector input X and returns the matrix-vector product
 %   A*X. In all of the following syntaxes, you can replace A by AFUN.
 %
-%   X = PCG(A,B,Z,TOL) specifies the tolerance of the method. If TOL is []
+%   X = DPCG(A,B,Z,TOL) specifies the tolerance of the method. If TOL is []
 %   then PCG uses the default, 1e-6.
 %
-%   X = PCG(A,B,Z,TOL,MAXIT) specifies the maximum number of iterations. If
+%   X = DPCG(A,B,Z,TOL,MAXIT) specifies the maximum number of iterations. If
 %   MAXIT is [] then PCG uses the default, min(N,20).
 %
-%   X = PCG(A,B,Z,TOL,MAXIT,M) and X = PCG(A,B,TOL,MAXIT,M1,M2) use symmetric
+%   X = DPCG(A,B,Z,TOL,MAXIT,M) and X = PCG(A,B,TOL,MAXIT,M1,M2) use symmetric
 %   positive definite preconditioner M or M=M1*M2 and effectively solve the
 %   system inv(M)*A*X = inv(M)*B for X. If M is [] then a preconditioner
 %   is not applied. M may be a function handle MFUN returning M\X.
 %
-%   X = PCG(A,B,Z,TOL,MAXIT,M1,M2,X0) specifies the initial guess. If X0 is
+%   X = DPCG(A,B,Z,TOL,MAXIT,M1,M2,X0) specifies the initial guess. If X0 is
 %   [] then PCG uses the default, an all zero vector.
 %
-%   [X,FLAG] = PCG(A,B,...) also returns a convergence FLAG:
-%    0 PCG converged to the desired tolerance TOL within MAXIT iterations
-%    1 PCG iterated MAXIT times but did not converge.
+%   [X,FLAG] = DPCG(A,B,...) also returns a convergence FLAG:
+%    0 DPCG converged to the desired tolerance TOL within MAXIT iterations
+%    1 DPCG iterated MAXIT times but did not converge.
 %    2 preconditioner M was ill-conditioned.
-%    3 PCG stagnated (two consecutive iterates were the same).
+%    3 DPCG stagnated (two consecutive iterates were the same).
 %    4 one of the scalar quantities calculated during PCG became too
 %      small or too large to continue computing.
 %
-%   [X,FLAG,RELRES] = PCG(A,B,...) also returns the relative residual
+%   [X,FLAG,RELRES] = DPCG(A,B,...) also returns the relative residual
 %   NORM(B-A*X)/NORM(B). If FLAG is 0, then RELRES <= TOL.
 %
-%   [X,FLAG,RELRES,ITER] = PCG(A,B,...) also returns the iteration number
+%   [X,FLAG,RELRES,ITER] = DPCG(A,B,...) also returns the iteration number
 %   at which X was computed: 0 <= ITER <= MAXIT.
 %
-%   [X,FLAG,RELRES,ITER,RESVEC] = PCG(A,B,...) also returns a vector of the
+%   [X,FLAG,RELRES,ITER,RESVEC] = DPCG(A,B,...) also returns a vector of the
 %   estimated residual norms at each iteration including NORM(B-A*X0).
 %
 %   Example:
 %      n1 = 21; A = gallery('moler',n1);  b1 = A*ones(n1,1);
 %      tol = 1e-6;  maxit = 15;  M = diag([10:-1:1 1 1:10]);
-%      [x1,flag1,rr1,iter1,rv1] = pcg(A,b1,tol,maxit,M);
+%      [x1,flag1,rr1,iter1,rv1] = dpcg(A,b1,tol,maxit,M);
 %   Or use this parameterized matrix-vector product function:
 %      afun = @(x,n)gallery('moler',n)*x;
 %      n2 = 21; b2 = afun(ones(n2,1),n2);
-%      [x2,flag2,rr2,iter2,rv2] = pcg(@(x)afun(x,n2),b2,tol,maxit,M);
+%      [x2,flag2,rr2,iter2,rv2] = dpcg(@(x)afun(x,n2),b2,tol,maxit,M);
 %
 %   Class support for inputs A,B,M1,M2,X0 and the output of AFUN:
 %      float: double
@@ -71,6 +72,9 @@ if strcmp(atype,'matrix')
     if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
+    if ~isequal(size(Z,1),m)
+        error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
+    end
 else
     m = size(b,1);
     n = m;
@@ -85,11 +89,11 @@ if (nargin < 4) || isempty(tol)
 end
 warned = 0;
 if tol <= eps
-    warning(message('MATLAB:pcg:tooSmallTolerance'));
+    warning(message('MATLAB:dpcg:tooSmallTolerance'));
     warned = 1;
     tol = eps;
 elseif tol >= 1
-    warning(message('MATLAB:pcg:tooBigTolerance'));
+    warning(message('MATLAB:dpcg:tooBigTolerance'));
     warned = 1;
     tol = 1-eps;
 end
@@ -97,26 +101,23 @@ if (nargin < 5) || isempty(maxit)
     maxit = min(n,20);
 end
 
-%Galerkin matrix 
-E=Z'*A*Z;
+
+E=A*Z;
+E=Z'*E;                            %Galerkin matrix
 EI=sparse(inv(E));
 
-%Preconditioned right hand side
-b0=b;
-[b]=dvect(Z,EI,A,b);
-
-
 % Check for all zero right hand side vector => all zero solution
-n2b0 = norm(b0);                     % Norm of rhs vector, b
-n2b = norm(b);                     % Norm of rhs deflated vector, Pb
+n2b = norm(b);                     % Norm of rhs vector, b
+%[Pb]=dvect(Z,EI,A,b);
+%n2Pb = norm(Pb);                     % Norm of rhs vector, b
 if (n2b == 0)                      % if    rhs vector is all zeros
     x = zeros(n,1);                % then  solution is all zeros
     flag = 0;                      % a valid solution has been obtained
     relres = 0;                    % the relative residual is actually 0/0
-    iter = 0;                      % no iterations need be performed
+    ii = 0;                      % no iterations need be performed
     resvec = 0;                    % resvec(1) = norm(b-A*x) = norm(0)
     if (nargout < 3)
-        itermsg('dpcg',tol,maxit,0,flag,iter,NaN);
+        itermsg('dpcg',tol,maxit,0,flag,ii,NaN);
     end
     return
 end
@@ -126,7 +127,7 @@ if ((nargin >= 6) && ~isempty(M1))
     [m1type,m1fun,m1fcnstr] = iterchk(M1);
     if strcmp(m1type,'matrix')
         if ~isequal(size(M1),[m,m])
-            error(message('MATLAB:pcg:WrongPrecondSize', m));
+            error(message('MATLAB:dpcg:WrongPrecondSize', m));
         end
     end
 else
@@ -139,7 +140,7 @@ if ((nargin >= 7) && ~isempty(M2))
     [m2type,m2fun,m2fcnstr] = iterchk(M2);
     if strcmp(m2type,'matrix')
         if ~isequal(size(M2),[m,m])
-            error(message('MATLAB:pcg:WrongPrecondSize', m));
+            error(message('MATLAB:dpcg:WrongPrecondSize', m));
         end
     end
 else
@@ -149,7 +150,7 @@ end
 
 if ((nargin >= 8) && ~isempty(x0))
     if ~isequal(size(x0),[n,1])
-        error(message('MATLAB:pcg:WrongInitGuessSize', n));
+        error(message('MATLAB:dpcg:WrongInitGuessSize', n));
     else
         x = x0;
     end
@@ -157,30 +158,56 @@ else
     x = zeros(n,1);
 end
 
+
 if ((nargin > 8) && strcmp(atype,'matrix') && ...
         strcmp(m1type,'matrix') && strcmp(m2type,'matrix'))
-    error(message('MATLAB:pcg:TooManyInputs'));
+    error(message('MATLAB:dpcg:TooManyInputs'));
 end
 
 % Set up for the method
+ 
+px=x;
+P=I-A*(Z*EI*Z');
 flag = 1;
 xmin = x;                          % Iterate which has minimal residual so far
 imin = 0;                          % Iteration at which xmin was computed
-tolb = tol * n2b;                  % Relative deflated tolerance
-tolb0 = tol * n2b0;                  % Relative tolerance
-r = b0 - iterapp('mtimes',afun,atype,afcnstr,x,varargin{:});
+tolb = tol * n2b;                  % Relative tolerance
+Pb = P * b;
+n2Pb = norm(Pb);
+tolPb = tol * n2Pb;                  % Relative tolerance
+r = b - iterapp('mtimes',afun,atype,afcnstr,x,varargin{:});
+normr = norm(r);                   % Norm of residual
+normr_act = normr;
+
+
+
+if (normr <= tolb)                 % Initial guess is a good enough solution
+    flag = 0;
+    relres = normr / n2b;
+    ii = 0;
+    resvec = normr;
+    
+    if (nargout < 2)
+        itermsg('dpcg',tol,maxit,0,flag,ii,relres);
+    end
+    return
+end
+%Deflated residual
 [Pr]=dvect(Z,EI,A,r);
-r=Pr;
+
+r=P*r;
+%r=Pr;
 normr = norm(r);                   % Norm of residual
 normr_act = normr;
 
 if (normr <= tolb)                 % Initial guess is a good enough solution
     flag = 0;
-    relres = normr / n2b;
-    iter = 0;
+    relres = normr / n2Pb;
+    ii = 0;
     resvec = normr;
-    if (nargout < 3)
-        itermsg('pcg',tol,maxit,0,flag,iter,relres);
+    
+    if (nargout < 2)
+        itermsg('dpcg',tol,maxit,0,flag,ii,relres);
     end
     return
 end
@@ -194,87 +221,132 @@ moresteps = 0;
 maxmsteps = min([floor(n/50),5,n-maxit]);
 maxstagsteps = 3;
 
-% loop over maxit iterations (unless convergence or failure)
 
-for ii = 1 : maxit
-    if existM1
-        y = iterapp('mldivide',m1fun,m1type,m1fcnstr,r,varargin{:});
-        if ~all(isfinite(y))
+%[pb]=dvect(Z,EI,A,b);
+%l=ichol(a);
+lb=iterapp('mldivide',m1fun,m1type,m1fcnstr,b,varargin{:});
+
+plb=iterapp('mldivide',m1fun,m1type,m1fcnstr,Pb,varargin{:});
+
+nor1=abs(plb'*plb);
+xi=x;
+%r0=b-a*xi;
+%[r0]=deflatevect(z,EI,a,r0);
+%r0=l\r0;
+%p0=l'\r0;
+nor=abs(lb'*lb);    
+
+     if existM1
+        r0 = iterapp('mldivide',m1fun,m1type,m1fcnstr,r,varargin{:});
+        if ~all(isfinite(r0))
             flag = 2;
-            break
+            return
         end
     else % no preconditioner
-        y = r;
+        r0 = r;
     end
-    
-    if existM2
-        z = iterapp('mldivide',m2fun,m2type,m2fcnstr,y,varargin{:});
-        if ~all(isfinite(z))
-            flag = 2;
+ %r0=iterapp('mldivide',m1fun,m1type,m1fcnstr,r,varargin{:});
+% p0=iterapp('mldivide',m2fun,m2type,m2fcnstr,r0,varargin{:});
+% loop over maxit iterations (unless convergence or failure)
+for ii=1:maxit
+
+%     
+     if existM2
+         z0 = iterapp('mldivide',m2fun,m2type,m2fcnstr,r0,varargin{:});
+         if ~all(isfinite(z0))
+             flag = 2;
             break
-        end
-    else % no preconditioner
-        z = y;
-    end
-    
-    rho1 = rho;
-    rho = r' * z;
+         end
+     else % no preconditioner
+         z0 = r0;
+     end
+%     
+      rho1 = rho;
+    rho = r0' * r0;
     if ((rho == 0) || isinf(rho))
         flag = 4;
         break
     end
     if (ii == 1)
-        p = z;
+        p = z0;
     else
         beta = rho / rho1;
         if ((beta == 0) || isinf(beta))
             flag = 4;
             break
         end
-        p = z + beta * p;
+        p = z0 + beta * p;
     end
-    q = iterapp('mtimes',afun,atype,afcnstr,p,varargin{:});   
-
-    [q]=dvect(Z,EI,A,q);
-    pq = p' * q;
+    q = iterapp('mtimes',afun,atype,afcnstr,p,varargin{:});
+        [ap]=dvect(Z,EI,A,q);
+%         [apt]=tdvect(z,EI,a,z0);
+         pq = p' * q;
     if ((pq <= 0) || isinf(pq))
         flag = 4;
         break
     else
-        alpha = rho / pq;
+        %alpha = (r0'*r0) / pq;
+        alpha = rho/ pq;
     end
     if isinf(alpha)
         flag = 4;
         break
     end
-    
-    % Check for stagnation of the method    
-    if (norm(p)*abs(alpha) < eps*norm(x))
-        stag = stag + 1;
-    else
-        stag = 0;
-    end
-    
-    x = x + alpha * p;             % form new iterate
-    r = r - alpha * q;
-    normr = norm(r);
+     %alpha=(r0'*r0)/(pq);   
+      if existM1
+         r1 = iterapp('mldivide',m1fun,m1type,m1fcnstr,ap,varargin{:});
+         if ~all(isfinite(r1))
+             flag = 2;
+             break
+         end
+     else % no preconditioner
+         r1 = ap;
+     end
+     x=xi+alpha*p;
+     %rl = iterapp('mldivide',m1fun,m1type,m1fcnstr,ap,varargin{:});
+     r=r0-alpha*(r1);
+     
+     r0=r;
+     color=[0.1 0.5 0.5];
+
+ 
+     %problem is when computing norm(r) is not the same as abs(r'*r)
+      normr = norm(r);
     normr_act = normr;
     resvec(ii+1,1) = normr;
-    
-    % check for convergence
-    if (normr <= tolb || stag >= maxstagsteps || moresteps)
-        
-        r = b - iterapp('mtimes',afun,atype,afcnstr,x,varargin{:});
-        normr_act = norm(r);
+     
+      %ee=abs(r'*r)/nor
+      ee=abs(sqrt(r'*r));
+     figure(124)
+     hl1=semilogy(ii,ee,'p','Color',color);
+     hold on
+      % flag=0;
+
+%      if (ee>=tol)
+%          flag=1;
+%      end
+%      if flag==0
+%          break
+%      end     
+
+tolb=tolb;
+
+     
+         % check for convergence
+    if (normr <= tolPb || stag >= maxstagsteps || moresteps)
+%         normr
+%         tolb
+%         r = b - iterapp('mtimes',afun,atype,afcnstr,xf,varargin{:});
+%         [Pr]=dvect(Z,EI,A,r);
+%         normr_act = abs(Pr'*Pr);
         resvec(ii+1,1) = normr_act;
+        %Deflated residual
+%         [Pr]=dvect(Z,EI,A,r);
+%         r=Pr;
         if (normr_act <= tolb)
             flag = 0;
             iter = ii;
-            %transform x back
-            [Ptx]=tdvect(Z,EI,A,x);
-            [Qb]=qvect(Z,EI,b);
-            x=Qb+Ptx;         
-            break           
+            break
         else
             if stag >= maxstagsteps && moresteps == 0
                 stag = 0;
@@ -282,7 +354,7 @@ for ii = 1 : maxit
             moresteps = moresteps + 1;
             if moresteps >= maxmsteps
                 if ~warned
-                    warning(message('MATLAB:dpcg:tooSmallTolerance'));
+                    warning(message('MATLAB:pcg:tooSmallTolerance'));
                 end
                 flag = 3;
                 iter = ii;
@@ -290,37 +362,36 @@ for ii = 1 : maxit
             end
         end
     end
-    if (normr_act < normrmin)      % update minimal norm quantities
-        normrmin = normr_act;
-         [Ptx]=tdvect(Z,EI,A,x);
-         [Qb]=qvect(Z,EI,b);
-         x=Qb+Ptx;
-        
-        xmin = x;
-        imin = ii;
-    end
-    if stag >= maxstagsteps
-        flag = 3;
-        break;
-    end
-end                                % for ii = 1 : maxit
+     xi=x;
+     
+end
 
 % returned solution is first with minimal residual
-if (flag == 0)
-    relres = normr_act / n2b;
-else
+ if (flag == 0)
+
+     relres = normr_act / n2b;
+     [x]=tdeflatevect(Z,EI,A,x);
+qb=Z'*b;
+qb=EI*qb;
+qb=Z*qb;
+x=qb+x;
+
+
+ else
+    
     r_comp = b - iterapp('mtimes',afun,atype,afcnstr,xmin,varargin{:});
     if norm(r_comp) <= normr_act
         x = xmin;
         iter = imin;
         relres = norm(r_comp) / n2b;
-        
     else
+        x = xmin;
         iter = ii;
         relres = normr_act / n2b;
     end
-end
+ end
 
+% 
 % truncate the zeros from resvec
 if ((flag <= 1) || (flag == 3))
     resvec = resvec(1:ii+1,:);
@@ -328,11 +399,10 @@ else
     resvec = resvec(1:ii,:);
 end
 
-% only display a message if the output flag is not used
-if (nargout < 3)
-    itermsg('dpcg',tol,maxit,ii,flag,iter,relres);
+%only display a message if the output flag is not used
+if (nargout < 2)
+    itermsg('pcg',tol,maxit,ii,flag,ii,relres);
 end
-
 function[Qx]=qvect(Z,EI,x)
 Qx=Z'*x;
 Qx=EI*Qx;
@@ -342,9 +412,8 @@ function[Px]=dvect(Z,EI,A,x)
 [Qx]=qvect(Z,EI,x);
 Px=x-A*Qx;
 end
-function[Ptx]=tdvect(Z,EI,A,x)
-Ptx=A'*x;
-[Qx]=qvect(Z,EI,Ptx);
-Ptx=x-Qx;
+function[Ptx]=tdvect(Z,EI,x,b)
+    [Qb]=qvect(Z,EI,b);
+Ptx=x-Qb;
 end
 end

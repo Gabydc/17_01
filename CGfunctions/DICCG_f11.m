@@ -1,5 +1,5 @@
 
-function[x,flag,relres,ii,resvec]=DICCG(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+function[x,flag,relres,ii,resvec]=DICCG_f(A,b,Z,tol,maxit,M1,M2,x0,varargin)
 %DPCG  Deflated Preconditioned Conjugate Gradients Method.
 %   X = DPCG(A,B,Z) attempts to solve the system of linear equations PA*X=PB for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
@@ -73,9 +73,9 @@ if strcmp(atype,'matrix')
     if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
-    if ~isequal(size(Z,1),m) 
-        error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
-    end
+%     if ~isequal(size(Z,1),m) 
+%         error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
+%     end
 else
     m = size(b,1);
     n = m;
@@ -102,13 +102,22 @@ if (nargin < 5) || isempty(maxit)
     maxit = min(n,20);
 end
 
+%check size of Z, matrix A contains wells also
+if size(A) == size(Z)
+    Z1=Z;
+else
+    Z1=eye(size(A));
+    Z1(1:size(Z,1),1:size(Z,2))=Z;
+end
+  Z=Z1;
+  clear Z1
 
 
 E = Z' * A * Z;
 EI = sparse(inv(E));
 % Check for all zero right hand side vector => all zero solution
 n2b = norm(b);                     % Norm of rhs vector, b
-%[Pb]=dvect(Z,EI,A,b);
+%[Pb] = dvect(Z,EI,A,b);
 %n2Pb = norm(Pb);                     % Norm of rhs vector, b
 if (n2b == 0)                      % if    rhs vector is all zeros
     x = zeros(n,1);                % then  solution is all zeros
@@ -232,9 +241,12 @@ nor=abs(lb'*lb);
 %nor=1;
 
 for ii=1:maxit
+    ii
+    x0=x;
          if existM2
          p0 = iterapp('mldivide',m2fun,m2type,m2fcnstr,r,varargin{:});
          if ~all(isfinite(p0))
+             error(message('MATLAB:dpcg:p0 bad computed', n));
              flag = 2;
             break
          end
@@ -248,6 +260,7 @@ for ii=1:maxit
     if ((rho == 0) || isinf(rho))
         flag = 4;
         break
+        error(message('MATLAB:dpcg:rho is zero', n));
     end
     if (ii == 1)
         p = p0;
@@ -255,6 +268,7 @@ for ii=1:maxit
         beta = rho / rho1;
         if ((beta == 0) || isinf(beta))
             flag = 4;
+            error(message('MATLAB:dpcg:beta is zero or infinity', n));
             break
         end
         p = p0 + beta * p;
@@ -265,6 +279,7 @@ for ii=1:maxit
          pq = p0' * q;
      if ((pq <= 0) || isinf(pq))
         flag = 4;
+        error(message('MATLAB:dpcg:pq inf or pq<=0', n));
         break
     else
         %alpha = (r0'*r0) / pq;
@@ -273,6 +288,7 @@ for ii=1:maxit
     end    
      if isinf(alpha)
         flag = 4;
+        error(message('MATLAB:dpcg:alpha is zero', n));
         break
      end
     
@@ -280,6 +296,7 @@ for ii=1:maxit
          r1 = iterapp('mldivide',m1fun,m1type,m1fcnstr,ap,varargin{:});
          if ~all(isfinite(r1))
              flag = 2;
+             error(message('MATLAB:dpcg:r1 is inf', n));
              break
          end
      else % no preconditioner
@@ -354,7 +371,7 @@ for ii=1:maxit
     end
      
      
-     x0=x;
+ 
 end
 
 % returned solution is first with minimal residual

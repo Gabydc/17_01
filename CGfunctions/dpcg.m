@@ -1,4 +1,4 @@
-function [xf,flag,relres,iter,resvec] = dpcg(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+function [x,flag,relres,ii,resvec] = dpcg(A,b,Z,tol,maxit,M1,M2,x0,varargin)
 %DPCG  Deflated Preconditioned Conjugate Gradients Method.
 %   X = DPCG(A,B,Z) attempts to solve the system of linear equations PA*X=PB for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
@@ -65,19 +65,14 @@ end
 [atype,afun,afcnstr] = iterchk(A);
 if strcmp(atype,'matrix')
     % Check matrix and right hand side vector inputs have appropriate sizes
-    [m,n] = size(A);        
-       sb=size(b)
-        [m,1]
-        size(Z,1)
-        m
+    [m,n] = size(A);
     if (m ~= n)
         error(message('MATLAB:dpcg:NonSquareMatrix'));
     end
-    if ~isequal(length(b),m)
-
+    if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
-        if ~isequal(size(Z,1),m)
+    if ~isequal(size(Z,1),m)
         error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
     end
 else
@@ -222,11 +217,8 @@ moresteps = 0;
 maxmsteps = min([floor(n/50),5,n-maxit]);
 maxstagsteps = 3;
 
-z=Z;
-a=A;
-e=z'*A*z;
-EI=sparse(inv(e));
-[pb]=dvect(z,EI,a,b);
+
+[pb]=dvect(Z,EI,A,b);
 %l=ichol(a);
 lb=iterapp('mldivide',m1fun,m1type,m1fcnstr,b,varargin{:});
 
@@ -281,7 +273,7 @@ for ii=1:maxit
         p = z0 + beta * p;
     end
     q = iterapp('mtimes',afun,atype,afcnstr,p,varargin{:});
-        [ap]=dvect(z,EI,a,q);
+        [ap]=dvect(Z,EI,A,q);
 %         [apt]=tdvect(z,EI,a,z0);
          pq = p' * q;
     if ((pq <= 0) || isinf(pq))
@@ -305,7 +297,7 @@ for ii=1:maxit
      else % no preconditioner
          r1 = ap;
      end
-     xf=xi+alpha*p;
+     x=xi+alpha*p;
      %rl = iterapp('mldivide',m1fun,m1type,m1fcnstr,ap,varargin{:});
      r=r0-alpha*(r1);
      
@@ -365,7 +357,7 @@ tolb=tolb;
             end
         end
     end
-     xi=xf;
+     xi=x;
      
 end
 
@@ -373,11 +365,11 @@ end
  if (flag == 0)
 
      relres = normr_act / n2b;
-     [xf]=tdeflatevect(z,EI,a,xf);
-qb=z'*b;
+     [x]=tdeflatevect(Z,EI,A,x);
+qb=Z'*b;
 qb=EI*qb;
-qb=z*qb;
-xf=qb+xf;
+qb=Z*qb;
+x=qb+x;
 
 
  else
@@ -388,11 +380,12 @@ xf=qb+xf;
         iter = imin;
         relres = norm(r_comp) / n2b;
     else
-        xf = xmin;
+        x = xmin;
         iter = ii;
         relres = normr_act / n2b;
     end
  end
+
 % 
 % truncate the zeros from resvec
 if ((flag <= 1) || (flag == 3))

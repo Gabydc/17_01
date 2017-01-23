@@ -24,7 +24,7 @@ mrstModule add incomp
 % To set up a model, we need: a grid, rock properties (permeability), a
 % fluid object with density and viscosity, and boundary conditions.
 gravity reset on
-G          = cartGrid([10, 10, 100], [10, 10, 100]);
+G          = cartGrid([10, 10, 10], [10, 10, 10]);
 G          = computeGeometry(G);
 rock.perm  = repmat(0.1*darcy(), [G.cells.num, 1]);
 fluid      = initSingleFluid('mu' ,    1*centi*poise, ...
@@ -41,8 +41,8 @@ bc  = pside([], G, 'TOP', 100.*barsa());
    %  mrstModule add agmg
    %  solver = AGMGSolverAD('tolerance', 1e-5);
    %  solver = GMRES_ILUSolverAD('tolerance', 1e-5, 'maxIterations', 1000);
-    
-     solver = PCG_ICSolverAD('tolerance', 1e-5, 'maxIterations', 1000);
+     %solver = PCG_ICSolverAD('tolerance', 1e-5, 'maxIterations', 1000);
+     solver = DPCG_ICSolverAD_1('tolerance', 1e-5,'maxIterations', 1000);
    % solver = BackslashSolverAD();
 
 
@@ -52,6 +52,7 @@ tic
 sol = simpleIncompTPFA(initResSol(G, 0.0), G, T, fluid, 'bc', bc,'LinSolve', fn);
 toc
 %% Plot the face pressures
+close all
 newplot;
 plotFaces(G, 1:G.faces.num, convertTo(sol.facePressure, barsa()));
 set(gca, 'ZDir', 'reverse'), title('Pressure [bar]')

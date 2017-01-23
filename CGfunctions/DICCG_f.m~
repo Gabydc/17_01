@@ -1,5 +1,5 @@
 
-function[x,flag,relres,ii,resvec]=DICCG(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+function[x,flag,relres,ii,resvec]=DICCG_f(A,b,Z,tol,maxit,M1,M2,x0,varargin)
 %DPCG  Deflated Preconditioned Conjugate Gradients Method.
 %   X = DPCG(A,B,Z) attempts to solve the system of linear equations PA*X=PB for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
@@ -73,9 +73,9 @@ if strcmp(atype,'matrix')
     if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
-    if ~isequal(size(Z,1),m) 
-        error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
-    end
+%     if ~isequal(size(Z,1),m) 
+%         error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
+%     end
 else
     m = size(b,1);
     n = m;
@@ -102,13 +102,20 @@ if (nargin < 5) || isempty(maxit)
     maxit = min(n,20);
 end
 
+%check size of Z, matrix A contains wells also
+if size(A) == size(Z)
+else
+    Z1=eye(size(A));
+    Z1(1:size(Z,1),1:size(Z,2))
+end
+    
 
 
 E = Z' * A * Z;
 EI = sparse(inv(E));
 % Check for all zero right hand side vector => all zero solution
 n2b = norm(b);                     % Norm of rhs vector, b
-%[Pb]=dvect(Z,EI,A,b);
+%[Pb] = dvect(Z,EI,A,b);
 %n2Pb = norm(Pb);                     % Norm of rhs vector, b
 if (n2b == 0)                      % if    rhs vector is all zeros
     x = zeros(n,1);                % then  solution is all zeros

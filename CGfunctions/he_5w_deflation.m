@@ -20,9 +20,9 @@ num='5';
 Lx=sz;
 Ly=sz;
 
-for k=10
+for k = 7
     k
-tol=10^-k;
+tol = 10^-k;
 
 for per=[1]
    
@@ -154,15 +154,20 @@ end
 
 
 sol = initState(G, W, 0);
-
+load A1;
 
 % Reference TPFA
   mrstModule add agmg
   %mrstModile add PCG_ICSol
    %  solver = AGMGSolverAD('tolerance', 1e-5);
   % solver = GMRES_ILUSolverAD('tolerance', 1e-5);
-  %solver = PCG_ICSolverAD('tolerance', 1e-10,'maxIterations', 1000);
-solver = DPCG_ICSolverAD('tolerance', 1e-5,'maxIterations', 1000,'Z',z1);
+  
+ % solver = PCG_ICSolverAD('tolerance', tol,'maxIterations', 1000);
+ %return
+ Z=A1;
+ sz1=size(Z);
+ %Z=1;
+solver = DPCG_ICSolverAD('tolerance', tol,'maxIterations', 1000, 'Z',Z);
  %solver = BackslashSolverAD();
 % pressureSolver = BackslashSolverAD();
 % linsolve = LinearSolverAD('ellipticSolver', pressureSolver);
@@ -170,9 +175,10 @@ solver = DPCG_ICSolverAD('tolerance', 1e-5,'maxIterations', 1000,'Z',z1);
 
 fn = @(A, b) solver.solveLinearSystem(A, b);
 tic
-psolve = @(state) incompTPFA(state, G, hT, fluid, 'wells', W,'MatrixOutput',true,'LinSolve', fn);
-toc
+psolve = @(state) incompTPFA_g(state, G, hT, fluid, 'wells', W,'MatrixOutput',true,'LinSolve', fn);
+
 sol= psolve(sol);
+toc
 p=sol.pressure;
  A=sol.A(1:G.cells.num,1:G.cells.num);
  b=sol.rhs(1:G.cells.num);
@@ -182,12 +188,12 @@ xb=A\b;
 res=p-xb;
 
 figure(s+per+200)
-[ht]=plotingsolution(G,W,'ICCG', p,1) ;
+[ht]=plotingsolution(G,W,'DICCG', p,1) ;
 colorbar
  [ht]=plotingsolution(G,W,'backslash',xb,2);
  colorbar
 figure(s+per+300)
- [h1]=plotingsolution(G,W,'bs-ICGCG',res,2);
+ [h1]=plotingsolution(G,W,'bs-DICGCG',res,2);
 colorbar
 
 

@@ -1,5 +1,5 @@
 
-function[x,flag,relres,ii,resvec]=DICCG(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+function[x,flag,relres,ii,resvec]=DICCG_f(A,b,Z,tol,maxit,M1,M2,x0,varargin)
 %DPCG  Deflated Preconditioned Conjugate Gradients Method.
 %   X = DPCG(A,B,Z) attempts to solve the system of linear equations PA*X=PB for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
@@ -73,9 +73,9 @@ if strcmp(atype,'matrix')
     if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
-    if ~isequal(size(Z,1),m) 
-        error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
-    end
+%     if ~isequal(size(Z,1),m) 
+%         error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
+%     end
 else
     m = size(b,1);
     n = m;
@@ -101,14 +101,32 @@ end
 if (nargin < 5) || isempty(maxit)
     maxit = min(n,20);
 end
-
+%A1=A;
+%check size of Z, matrix A contains wells also
+%clear A
+%A=A1(1:size(Z,1),1:size(Z,2));
+full(A)
+size(A)
+if size(A) == size(Z)
+    Z1=Z;
+else
+    Z1=eye(size(A));
+    Z1(1:size(Z,1),1:size(Z,2))=Z;
+end
+  Z=Z1;
+  clear Z1
+  size(Z)
+  Z=1;
 
 
 E = Z' * A * Z;
 EI = sparse(inv(E));
+Da=det(A)
+de=det(E)
+dei=det(EI)
 % Check for all zero right hand side vector => all zero solution
-n2b = norm(b);                     % Norm of rhs vector, b
-%[Pb]=dvect(Z,EI,A,b);
+n2b = norm(b)                     % Norm of rhs vector, b
+%[Pb] = dvect(Z,EI,A,b);
 %n2Pb = norm(Pb);                     % Norm of rhs vector, b
 if (n2b == 0)                      % if    rhs vector is all zeros
     x = zeros(n,1);                % then  solution is all zeros
@@ -168,7 +186,7 @@ end
 flag = 1;
 xmin = x;                          % Iterate which has minimal residual so far
 imin = 0;                          % Iteration at which xmin was computed
-n2b=norm(b);                % Relative tolerance
+               % Relative tolerance
 tolb = tol * n2b;                  % Relative tolerance
 n2Pb = norm(Pb);
 tolPb = tol * n2Pb;  
@@ -177,7 +195,7 @@ plb=iterapp('mldivide',m1fun,m1type,m1fcnstr,Pb,varargin{:});
 n2Plb = norm(plb);
 tolPlb = tol * n2Plb;
 r = b - iterapp('mtimes',afun,atype,afcnstr,x,varargin{:});
-normr = norm(r);                   % Norm of residual
+normr = norm(r)                 % Norm of residual
 normr_act = normr;
 
 if (normr <= tolb)                 % Initial guess is a good enough solution
@@ -194,12 +212,12 @@ end
 %Deflated residual
 [r]=dvect(Z,EI,A,r);
 
-normr = norm(r);                   % Norm of residual
+normr = norm(r)                  % Norm of residual
 normr_act = normr;
 
 
 resvec = zeros(maxit+1,1);         % Preallocate vector for norm of residuals
-resvec(1,:) = normr;               % resvec(1) = norm(b-A*x0)
+resvec(1,:) = normr;               % resvec(1) = norm(P(b-A*x0))
 normrmin = normr;                  % Norm of minimum residual
 rho = 1;
 stag = 0;                          % stagnation of the method
@@ -232,9 +250,13 @@ nor=abs(lb'*lb);
 %nor=1;
 
 for ii=1:maxit
+    ii
+    x0=x;
          if existM2
          p0 = iterapp('mldivide',m2fun,m2type,m2fcnstr,r,varargin{:});
+         
          if ~all(isfinite(p0))
+             error(message('MATLAB:dpcg:p0 bad computed', n));
              flag = 2;
             break
          end
@@ -248,6 +270,7 @@ for ii=1:maxit
     if ((rho == 0) || isinf(rho))
         flag = 4;
         break
+        error(message('MATLAB:dpcg:rho is zero', n));
     end
     if (ii == 1)
         p = p0;
@@ -255,6 +278,7 @@ for ii=1:maxit
         beta = rho / rho1;
         if ((beta == 0) || isinf(beta))
             flag = 4;
+            error(message('MATLAB:dpcg:beta is zero or infinity', n));
             break
         end
         p = p0 + beta * p;
@@ -265,6 +289,7 @@ for ii=1:maxit
          pq = p0' * q;
      if ((pq <= 0) || isinf(pq))
         flag = 4;
+        error(message('MATLAB:dpcg:pq inf or pq<=0', n));
         break
     else
         %alpha = (r0'*r0) / pq;
@@ -273,6 +298,7 @@ for ii=1:maxit
     end    
      if isinf(alpha)
         flag = 4;
+        error(message('MATLAB:dpcg:alpha is zero', n));
         break
      end
     
@@ -280,6 +306,7 @@ for ii=1:maxit
          r1 = iterapp('mldivide',m1fun,m1type,m1fcnstr,ap,varargin{:});
          if ~all(isfinite(r1))
              flag = 2;
+             error(message('MATLAB:dpcg:r1 is inf', n));
              break
          end
      else % no preconditioner
@@ -321,8 +348,12 @@ for ii=1:maxit
 %          break
 %      end     
              % check for convergence
-             normr = abs(r'*r);
-    if (normr <= tolPlb || stag >= maxstagsteps || moresteps)
+             normr = abs(r'*r)
+             tolPb
+             normr/tolPb
+             tol
+             tolPlb
+    if (normr <= tolPb || stag >= maxstagsteps || moresteps)
 %         normr
 %         tolb
          r = b - iterapp('mtimes',afun,atype,afcnstr,x,varargin{:});
@@ -335,7 +366,7 @@ for ii=1:maxit
 %         r=Pr;
         if (normr_act <= tol)
             flag = 0;
-            iter = ii;
+            iter = ii
             break
         else
             if stag >= maxstagsteps && moresteps == 0
@@ -354,7 +385,7 @@ for ii=1:maxit
     end
      
      
-     x0=x;
+ 
 end
 
 % returned solution is first with minimal residual

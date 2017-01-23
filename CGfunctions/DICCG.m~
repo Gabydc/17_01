@@ -1,5 +1,5 @@
 
-function[x,flag,relres,ii,resvec]=DICCG(A,b,Z,tol,maxit,M1,M2,x0,varargin)
+function[x,flag,relres,ii,resvec]=DICCG(A,b,Z1,tol,maxit,M1,M2,x0,varargin)
 %DPCG  Deflated Preconditioned Conjugate Gradients Method.
 %   X = DPCG(A,B,Z) attempts to solve the system of linear equations PA*X=PB for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
@@ -73,9 +73,10 @@ if strcmp(atype,'matrix')
     if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
-    if ~isequal(size(Z,1),m) 
-        error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
-    end
+%     if  (Z~=1) 
+%         %|| (~isequal(size(Z,1),m))
+%         error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
+%     end
 else
     m = size(b,1);
     n = m;
@@ -102,7 +103,8 @@ if (nargin < 5) || isempty(maxit)
     maxit = min(n,20);
 end
 
-
+Z=zeros(size(A));
+Z(1:size(Z1,1),1:size(Z1,2))=Z1;
 
 E = Z' * A * Z;
 EI = sparse(inv(E));
@@ -116,7 +118,7 @@ if (n2b == 0)                      % if    rhs vector is all zeros
     relres = 0;                    % the relative residual is actually 0/0
     ii = 0;                      % no iterations need be performed
     resvec = 0;                    % resvec(1) = norm(b-A*x) = norm(0)
-    if (nargout < 3)
+    if (nargout < 2)
         itermsg('dpcg',tol,maxit,0,flag,ii,NaN);
     end
     return
@@ -285,6 +287,7 @@ for ii=1:maxit
      else % no preconditioner
          r1 = ap;
      end
+     x0=x;
      x=x0+alpha*p0;
      %rl = iterapp('mldivide',m1fun,m1type,m1fcnstr,ap,varargin{:});
      r=r0-alpha*(r1);
