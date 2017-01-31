@@ -1,0 +1,63 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: mainEcmor.aux
+The style file: firstbreak.bst
+Illegal, another \bibstyle command---line 117 of file mainEcmor.aux
+ : \bibstyle
+ :          {unsrt}
+I'm skipping whatever remains of this command
+Database file #1: research.bib
+Warning--I'm ignoring Astrid11's extra "pages" field
+--line 149 of file research.bib
+Warning--I'm ignoring Astrid11's extra "year" field
+--line 151 of file research.bib
+Too many commas in name 1 of "P. Astrid, G. Papaioannou, J. C Vink, J.D. Jansen" for entry Astrid11
+while executing---line 2539 of file firstbreak.bst
+Too many commas in name 1 of "P. Astrid, G. Papaioannou, J. C Vink, J.D. Jansen" for entry Astrid11
+while executing---line 2539 of file firstbreak.bst
+Too many commas in name 1 of "P. Astrid, G. Papaioannou, J. C Vink, J.D. Jansen" for entry Astrid11
+while executing---line 2699 of file firstbreak.bst
+Warning--empty pages in Astrid11
+Warning--empty publisher in Saad03
+You've used 11 entries,
+            2559 wiz_defined-function locations,
+            633 strings with 6324 characters,
+and the built_in function-call counts, 4706 in all, are:
+= -- 377
+> -- 102
+< -- 11
++ -- 43
+- -- 33
+* -- 335
+:= -- 755
+add.period$ -- 23
+call.type$ -- 11
+change.case$ -- 63
+chr.to.int$ -- 12
+cite$ -- 13
+duplicate$ -- 379
+empty$ -- 418
+format.name$ -- 58
+if$ -- 939
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 81
+newline$ -- 48
+num.names$ -- 33
+pop$ -- 137
+preamble$ -- 1
+purify$ -- 60
+quote$ -- 0
+skip$ -- 148
+stack$ -- 0
+substring$ -- 214
+swap$ -- 192
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 58
+warning$ -- 2
+while$ -- 27
+width$ -- 0
+write$ -- 131
+(There were 4 error messages)

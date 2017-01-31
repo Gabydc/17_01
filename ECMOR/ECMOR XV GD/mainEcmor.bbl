@@ -1,0 +1,64 @@
+\begin{thebibliography}{11}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[B.~Smith, 1996]{Smith96}
+B.~Smith, P.~Bjorstad, W.G. [1996] \emph{{Domain decomposition: parallel
+  multilevel methods for elliptic partial differential equations.}}
+\newblock Cambridge University Press New York.
+
+\bibitem[C.~Vuik and Meijerink, 1999]{Vuik99}
+C.~Vuik, A.S. and Meijerink, J.A. [1999] {An Efficient Preconditioned CG Method
+  for the Solution of a Class of Layered Problems with Extreme Contrasts in the
+  Coefficients.}
+\newblock \emph{Journal of Computational Physics}, \textbf{152}, 385.
+
+\bibitem[C.~Vuik and Dufour, 2002]{Vuik02}
+C.~Vuik, A.~Segal, L.Y. and Dufour, E. [2002] {A comparison of various
+  deflation vectors applied to elliptic problems with discontinuous
+  coefficients.}
+\newblock \emph{Applied Numerical Mathematics}, \textbf{41}(1), 219--233.
+
+\bibitem[Jansen, 2013]{Jansen13}
+Jansen, J.D. [2013] \emph{{A systems description of flow through porous
+  media.}}
+\newblock Springer.
+
+\bibitem[J.M.~Tang and Erlangga, 2009]{Tang09}
+J.M.~Tang, R.~Nabben, C.V. and Erlangga, Y. [2009] Comparison of two-level
+  preconditioners derived from deflation, domain decomposition and multigrid
+  methods.
+\newblock \emph{Journal of scientific computing}, \textbf{39}(3), 340--370.
+
+\bibitem[Lie, 2013]{Lie13}
+Lie, K.A. [2013] \emph{{An Introduction to Reservoir Simulation Using MATLAB:
+  User guide for the Matlab Reservoir Simulation Toolbox (MRST).}}
+\newblock SINTEF ICT.
+
+\bibitem[M.~Clemens and Weiland, 2004]{Clemens04}
+M.~Clemens, M.~Wilke, R.S. and Weiland, T. [2004] {Subspace projection
+  extrapolation scheme for transient field simulations.}
+\newblock \emph{IEEE Transactions on Magnetics}, \textbf{40}(2), 934--937.
+
+\bibitem[Markovinovi{\'c} and Jansen, 2006]{Mark06}
+Markovinovi{\'c}, R. and Jansen, J.D. [2006] {Accelerating iterative solution
+  methods using reduced-order models as solution predictors.}
+\newblock \emph{International journal for numerical methods in engineering},
+  \textbf{68}(5), 525--541.
+
+\bibitem[P.~Astrid, 2011]{Astrid11}
+P.~Astrid, G.~Papaioannou, J.C.V.J.J. [2011] {Pressure Preconditioning Using
+  Proper Orthogonal Decomposition.}
+\newblock In: \emph{2011 SPE Reservoir Simulation Symposium, The Woodlands,
+  Texas, USA}.
+
+\bibitem[Saad, 2003]{Saad03}
+Saad, Y. [2003] \emph{{Iterative Methods for Sparse Linear Systems.}}
+\newblock Society for Industrial and Applied Mathematics Philadelphia, PA, USA.
+  2nd edn.
+
+\bibitem[Tang, 2008]{Tang08}
+Tang, J. [2008] \emph{{Two-Level Preconditioned Conjugate Gradient Methods with
+  Applications to Bubbly Flow Problems}}.
+\newblock Ph.D. thesis, Delft University of Technology.
+
+\end{thebibliography}

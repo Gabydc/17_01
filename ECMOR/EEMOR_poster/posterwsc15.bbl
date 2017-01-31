@@ -1,0 +1,27 @@
+\begin{thebibliography}{1}
+
+\bibitem{Tang08}
+J.~Tang.
+\newblock {\em {Two-Level Preconditioned Conjugate Gradient Methods with
+  Applications to Bubbly Flow Problems}}.
+\newblock PhD thesis, Delft University of Technology, 2008.
+
+\bibitem{Mark06}
+J.~D.~Jansen R.~Markovinovi{\'c}.
+\newblock {Accelerating iterative solution methods using reduced-order models
+  as solution predictors.}
+\newblock {\em International journal for numerical methods in engineering},
+  68(5):525--541, 2006.
+
+\bibitem{Astrid11}
+P.~Astrid; G. Papaioannou; J. C Vink;~J.D. Jansen.
+\newblock {Pressure Preconditioning Using Proper Orthogonal Decomposition.}
+\newblock In {\em 2011 SPE Reservoir Simulation Symposium, The Woodlands,
+  Texas, USA}, January 2011.
+
+\bibitem{Jansen13}
+J.D. Jansen.
+\newblock {\em {A systems description of flow through porous media.}}
+\newblock Springer, 2013.
+
+\end{thebibliography}

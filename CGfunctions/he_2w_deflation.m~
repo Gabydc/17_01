@@ -7,7 +7,7 @@ clc
 % data: permeability of 100 mD and porosity of 0.2.
 
 %pw=1;
-sz=3;
+sz=5;
 % w1=10*2^pw;
 % w2=2*w1;
 nxi=1;
@@ -24,7 +24,7 @@ for k = 11
     k
 tol = 10^-k;
 
-for per=[0]
+for per=[3]
    
 close all
 per
@@ -61,11 +61,10 @@ nzy=0;
 
 for i=1:sz
 
-    Z((i:i+sz)+sz*(i-1),i)=1;
-
+    Z((1:sz)+sz*(i-1),i)=1;
 end
-Z
-break
+%Z=eye(sz*sz);
+
 for i=1:2:sz
  rock.perm(1+lsize*(i-1):lsize*i)  = repmat(10^(-per), [lsize, 1]);
 end
@@ -142,7 +141,7 @@ display(fluid);
 
 for s=5
     well(1)=-1;
-    well(2)=4;
+    well(2)=1;
  xi=rand(nx*ny,1);
 
 wtype    = {'bhp', 'bhp'};
@@ -197,16 +196,20 @@ p=sol.pressure;
  size(A)
 % clf;
 xb=A\b;
-res=p-xb;
-
+resb=p-xb;
+%[xd,flag,res,its]=DICCG_01_25_2(A,b,Z,tol,1000);
+%resd=xd-xb;
 figure(s+per+200)
 [ht]=plotingsolution(G,W,'DICCG', p,1) ;
 colorbar
  [ht]=plotingsolution(G,W,'backslash',xb,2);
  colorbar
 figure(s+per+300)
- [h1]=plotingsolution(G,W,'bs-DICGCG',res,2);
-colorbar
+ [h1]=plotingsolution(G,W,'bs-DICGCG',xb-p,2);
+ colorbar
+%  figure(s+per+300)
+%  [h1]=plotingsolution(G,W,'DICGCG_m',xd-xb,1);
+% colorbar
 
 
 

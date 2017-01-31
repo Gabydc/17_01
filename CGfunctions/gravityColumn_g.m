@@ -41,8 +41,8 @@ bc  = pside([], G, 'TOP', 100.*barsa());
    %  mrstModule add agmg
    %  solver = AGMGSolverAD('tolerance', 1e-5);
    %  solver = GMRES_ILUSolverAD('tolerance', 1e-5, 'maxIterations', 1000);
-     %solver = PCG_ICSolverAD('tolerance', 1e-5, 'maxIterations', 1000);
-     solver = DPCG_ICSolverAD_1('tolerance', 1e-5,'maxIterations', 1000);
+     solver = PCG_ICSolverAD('tolerance', 1e-5, 'maxIterations', 1000);
+    % solver = DPCG_ICSolverAD('tolerance', 1e-5,'maxIterations', 1000);
    % solver = BackslashSolverAD();
 
 

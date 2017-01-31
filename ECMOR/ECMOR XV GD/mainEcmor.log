@@ -1,0 +1,1176 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.1.5)  16 JUN 2016 17:18
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**mainEcmor.tex
+(./mainEcmor.tex
+LaTeX2e <2014/05/01>
+Babel <3.9l> and hyphenation patterns for 29 languages loaded.
+(./ecmorXV.cls
+Document Class: ecmorXV 2015/05/28 v1.1 EAGE Abstract Class
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/mathptmx.sty
+Package: mathptmx 2005/04/12 PSNFSS-v9.2a Times w/ Math, improved (SPQR, WaS) 
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 28.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/ztmcm/m/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/ztmcm/m/n on input line 28.
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 29.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/ztmcm/m/it on input line 29.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/ztmcm/m/it on input line 29.
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 30.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/ztmcm/m/n on input line 30.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/ztmcm/m/n on input line 30.
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 31.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/ztmcm/m/n on input line 31.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/ztmcm/m/n on input line 31.
+\symbold=\mathgroup4
+\symitalic=\mathgroup5
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/ptm/bx/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/ptm/bx/n on input line 34.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/ptm/m/it on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/ptm/m/it on input line 35.
+LaTeX Info: Redefining \hbar on input line 50.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip43
+\bibsep=\skip44
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count87
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+\fancy@headwidth=\skip45
+\f@ncyO@elh=\skip46
+\f@ncyO@erh=\skip47
+\f@ncyO@olh=\skip48
+\f@ncyO@orh=\skip49
+\f@ncyO@elf=\skip50
+\f@ncyO@erf=\skip51
+\f@ncyO@olf=\skip52
+\f@ncyO@orf=\skip53
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count88
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip54
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen105
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen106
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count89
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count90
+\leftroot@=\count91
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count92
+\DOTSCASE@=\count93
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen107
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count94
+\c@MaxMatrixCols=\count95
+\dotsspace@=\muskip10
+\c@parentequation=\count96
+\dspbrk@lvl=\count97
+\tag@help=\toks16
+\row@=\count98
+\column@=\count99
+\maxfields@=\count100
+\andhelp@=\toks17
+\eqnshift@=\dimen108
+\alignsep@=\dimen109
+\tagshift@=\dimen110
+\tagwidth@=\dimen111
+\totwidth@=\dimen112
+\lineht@=\dimen113
+\@envbody=\toks18
+\multlinegap=\skip55
+\multlinetaggap=\skip56
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup6
+\symAMSb=\mathgroup7
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/mathrsfs.sty
+Package: mathrsfs 1996/01/01 Math RSFS package v1.0 (jk)
+\symrsfs=\mathgroup8
+)
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count101
+\float@exts=\toks20
+\float@box=\box28
+\@float@everytoks=\toks21
+\@floatcapt=\box29
+)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen114
+\captionmargin@=\dimen115
+\captionwidth=\dimen116
+\caption@tempdima=\dimen117
+\caption@indent=\dimen118
+\caption@parindent=\dimen119
+\caption@hangindent=\dimen120
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used.
+)
+
+Package caption Warning: Unsupported document class (or package) detected,
+(caption)                usage of the caption package is not recommended.
+See the caption package documentation for explanation.
+
+Package caption Info: \@makecaption = \long macro:#1#2->\vskip \abovecaptionski
+p \sbox \@tempboxa {{\bf \itshape #1} \itshape #2}\ifdim \wd \@tempboxa >\hsize
+ {{\bf \itshape #1} \itshape #2\par } \else \hbox to\hsize {\hfil \box \@tempbo
+xa \hfil }\fi \vskip \belowcaptionskip .
+\c@ContinuedFloat=\count102
+Package caption Info: float package is loaded.
+) (/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.sty
+Package: subfigure 2002/03/15 v2.1.5 subfigure package
+\subfigtopskip=\skip57
+\subfigcapskip=\skip58
+\subfigcaptopadj=\dimen121
+\subfigbottomskip=\skip59
+\subfigcapmargin=\dimen122
+\subfiglabelskip=\skip60
+\c@subfigure=\count103
+\c@lofdepth=\count104
+\c@subtable=\count105
+\c@lotdepth=\count106
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.cfg)
+\subfig@top=\skip61
+\subfig@bottom=\skip62
+)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/pifont.sty
+Package: pifont 2005/04/12 PSNFSS-v9.2a Pi font support (SPQR) 
+LaTeX Font Info:    Try loading font information for U+pzd on input line 63.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Try loading font information for U+psy on input line 64.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+)) (./mainEcmor.aux)
+\openout1 = `mainEcmor.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 12.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd
+File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
+)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count107
+\scratchdimen=\dimen123
+\scratchbox=\box30
+\nofMPsegments=\count108
+\nofMParguments=\count109
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count110
+\MPscratchDim=\dimen124
+\MPnumerator=\count111
+\makeMPintoPDFobject=\count112
+\everyMPtoPDFconversion=\toks23
+) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: subfigure package is loaded.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <11> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 14.
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--41
+
+ []
+
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 47
+.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
+File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 47
+.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
+File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 47
+.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
+File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 47
+.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
+File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 47.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 47.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 47.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 47.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 47.
+
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
+File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
+)
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 71.
+Package epstopdf Info: Output file is already uptodate.
+
+<eage-eps-converted-to.pdf, id=1, 331.2375pt x 77.28876pt>
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 71.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 71.
+Package epstopdf Info: Output file is already uptodate.
+
+<ecmorXV-eps-converted-to.pdf, id=2, 382.42876pt x 57.21375pt>
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+
+<use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 71.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 71.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 71.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./eage-eps-converted-to.pd
+f> <./ecmorXV-eps-converted-to.pdf>]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 123.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 123.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 123.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 130.
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 158.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 158.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 158.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 158.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [2]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 193.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 193.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 193.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 193.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [3]
+Underfull \hbox (badness 10000) in paragraph at lines 222--223
+
+ []
+
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 254.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 254.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 254.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 254.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [4]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 305.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 305.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 305.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 305.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [5]
+Underfull \hbox (badness 10000) in paragraph at lines 332--358
+
+ []
+
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 359.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 359.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 359.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 359.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [6]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 359.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 359.
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--386
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--386
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 386--398
+
+ []
+
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 398.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 398.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 398.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 398.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [7]
+LaTeX Font Info:    Font shape `T1/ptm/bx/it' in size <10.95> not available
+(Font)              Font shape `T1/ptm/b/it' tried instead on input line 399.
+
+<perm_he_1.jpg, id=44, 481.8pt x 382.42876pt>
+File: perm_he_1.jpg Graphic file (type jpg)
+ <use perm_he_1.jpg>
+Package pdftex.def Info: perm_he_1.jpg used on input line 434.
+(pdftex.def)             Requested size: 142.26208pt x 112.92053pt.
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 471.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 471.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 471.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 471.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [8 <./perm_he_1.jpg>] <conv_he_1.jpg, id=49, 1204.5pt x 903.375pt>
+File: conv_he_1.jpg Graphic file (type jpg)
+ <use conv_he_1.jpg>
+Package pdftex.def Info: conv_he_1.jpg used on input line 502.
+(pdftex.def)             Requested size: 170.70569pt x 128.02927pt.
+
+Underfull \hbox (badness 1221) in paragraph at lines 503--503
+[]\T1/ptm/m/n/9 Figure 2: |Con-ver-gence for the het-ero-ge-neous
+ []
+
+<sol_he_1.jpg, id=50, 428.90674pt x 216.81pt>
+File: sol_he_1.jpg Graphic file (type jpg)
+ <use sol_he_1.jpg>
+Package pdftex.def Info: sol_he_1.jpg used on input line 510.
+(pdftex.def)             Requested size: 170.72194pt x 86.299pt.
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 537.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 537.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 537.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 537.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [9 <./conv_he_1.jpg> <./sol_he_1.jpg>]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 575.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+ <use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 575.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 575.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+
+<use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 575.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [10]
+<perm_he_2.jpg, id=57, 626.34pt x 483.8075pt>
+File: perm_he_2.jpg Graphic file (type jpg)
+ <use perm_he_2.jpg>
+Package pdftex.def Info: perm_he_2.jpg used on input line 608.
+(pdftex.def)             Requested size: 142.2584pt x 109.88551pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 600--611
+
+ []
+
+<conv_he_2.jpg, id=58, 568.1225pt x 424.58624pt>
+File: conv_he_2.jpg Graphic file (type jpg)
+ <use conv_he_2.jpg>
+Package pdftex.def Info: conv_he_2.jpg used on input line 643.
+(pdftex.def)             Requested size: 142.26433pt x 106.32121pt.
+
+Underfull \hbox (badness 1221) in paragraph at lines 644--644
+[]\T1/ptm/m/n/9 Figure 5: |Con-ver-gence for the het-ero-ge-neous
+ []
+
+<sol_he_2.jpg, id=59, 573.14125pt x 289.08pt>
+File: sol_he_2.jpg Graphic file (type jpg)
+ <use sol_he_2.jpg>
+Package pdftex.def Info: sol_he_2.jpg used on input line 651.
+(pdftex.def)             Requested size: 170.71933pt x 86.10712pt.
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 656.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 656.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 656.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 656.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [11 <./perm_he_2.jpg>]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 678.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+ <use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 678.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 678.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 678.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+
+[12 <./conv_he_2.jpg> <./sol_he_2.jpg>]
+<eig_pod_het.jpg, id=66, 1204.5pt x 903.375pt>
+File: eig_pod_het.jpg Graphic file (type jpg)
+ <use eig_pod_het.jpg>
+Package pdftex.def Info: eig_pod_het.jpg used on input line 691.
+(pdftex.def)             Requested size: 170.70569pt x 128.02927pt.
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 723.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 723.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 723.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 723.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [13 <./eig_pod_het.jpg>] <perm_layer_2.jpg, id=71, 188.53044pt x 438.38506pt>
+File: perm_layer_2.jpg Graphic file (type jpg)
+
+<use perm_layer_2.jpg>
+Package pdftex.def Info: perm_layer_2.jpg used on input line 753.
+(pdftex.def)             Requested size: 73.41725pt x 170.71529pt.
+ <perm_layer_22.jpg, id=72, 332.24126pt x 835.12pt>
+File: perm_layer_22.jpg Graphic file (type jpg)
+
+<use perm_layer_22.jpg>
+Package pdftex.def Info: perm_layer_22.jpg used on input line 757.
+(pdftex.def)             Requested size: 67.91725pt x 170.71648pt.
+
+Underfull \hbox (badness 1210) in paragraph at lines 757--757
+[]\T1/ptm/m/n/9 (b) 60 x 220 grid
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 779--779
+[]\T1/ptm/m/n/10.95 Condition
+ []
+
+<conv_deftol-7_5_5.jpg, id=73, 562.1pt x 421.575pt>
+File: conv_deftol-7_5_5.jpg Graphic file (type jpg)
+
+<use conv_deftol-7_5_5.jpg>
+Package pdftex.def Info: conv_deftol-7_5_5.jpg used on input line 836.
+(pdftex.def)             Requested size: 170.7155pt x 128.03662pt.
+ <sol1.jpg, id=74, 243.91125pt x 418.56375pt>
+File: sol1.jpg Graphic file (type jpg)
+
+<use sol1.jpg>
+Package pdftex.def Info: sol1.jpg used on input line 844.
+(pdftex.def)             Requested size: 99.47948pt x 170.7117pt.
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 849.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+ <use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 849.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 849.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+
+<use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 849.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [14 <./perm_layer_2.jpg> <./perm_layer_22.jpg>]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 849.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+ <use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 849.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 849.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 849.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [15 <./conv_deftol-7_5_5.jpg> <./sol1.jpg>]
+<perm_layer_.jpg, id=81, 1204.5pt x 903.375pt>
+File: perm_layer_.jpg Graphic file (type jpg)
+ <use perm_layer_.jpg>
+Package pdftex.def Info: perm_layer_.jpg used on input line 912.
+(pdftex.def)             Requested size: 156.48022pt x 117.36017pt.
+File: conv_deftol-7_5_5.jpg Graphic file (type jpg)
+
+<use conv_deftol-7_5_5.jpg>
+Package pdftex.def Info: conv_deftol-7_5_5.jpg used on input line 920.
+(pdftex.def)             Requested size: 156.48634pt x 117.36475pt.
+
+<SPE10_85_sol.jpg, id=82, 597.01305pt x 229.51682pt>
+File: SPE10_85_sol.jpg Graphic file (type jpg)
+ <use SPE10_85_sol.jpg>
+Package pdftex.def Info: SPE10_85_sol.jpg used on input line 930.
+(pdftex.def)             Requested size: 199.1648pt x 76.56728pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<eig_pod_spe.jpg, id=83, 1204.5pt x 903.375pt>
+File: eig_pod_spe.jpg Graphic file (type jpg)
+ <use eig_pod_spe.jpg>
+Package pdftex.def Info: eig_pod_spe.jpg used on input line 963.
+(pdftex.def)             Requested size: 170.70569pt x 128.02927pt.
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 974.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 974.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 974.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 974.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [16]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 981.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 981.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 981.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 981.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [17 <./perm_layer_.jpg> <./SPE10_85_sol.jpg> <./eig_pod_spe.jpg>]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 1023.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 1023.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 1023.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 1023.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [18]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 1091.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 1091.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 1091.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 1091.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [19]
+Package epstopdf Info: Source file: <eage.eps>
+(epstopdf)                    date: 2009-08-28 14:53:52
+(epstopdf)                    size: 301301 bytes
+(epstopdf)             Output file: <eage-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:47
+(epstopdf)                    size: 11545 bytes
+(epstopdf)             Command: <repstopdf --outfile=eage-eps-converted-to.pdf 
+eage.eps>
+(epstopdf)             \includegraphics on input line 1111.
+Package epstopdf Info: Output file is already uptodate.
+File: eage-eps-converted-to.pdf Graphic file (type pdf)
+
+<use eage-eps-converted-to.pdf>
+Package pdftex.def Info: eage-eps-converted-to.pdf used on input line 1111.
+(pdftex.def)             Requested size: 106.41261pt x 24.46873pt.
+Package epstopdf Info: Source file: <ecmorXV.eps>
+(epstopdf)                    date: 2016-04-06 14:07:20
+(epstopdf)                    size: 282098 bytes
+(epstopdf)             Output file: <ecmorXV-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-04-25 14:15:48
+(epstopdf)                    size: 10980 bytes
+(epstopdf)             Command: <repstopdf --outfile=ecmorXV-eps-converted-to.p
+df ecmorXV.eps>
+(epstopdf)             \includegraphics on input line 1111.
+Package epstopdf Info: Output file is already uptodate.
+File: ecmorXV-eps-converted-to.pdf Graphic file (type pdf)
+ <use ecmorXV-eps-converted-to.pdf>
+Package pdftex.def Info: ecmorXV-eps-converted-to.pdf used on input line 1111.
+(pdftex.def)             Requested size: 154.49765pt x 23.33119pt.
+ [20]
+(./mainEcmor.aux) ) 
+Here is how much of TeX's memory you used:
+ 4548 strings out of 494409
+ 64823 string characters out of 6164778
+ 134488 words of memory out of 5000000
+ 7644 multiletter control sequences out of 15000+600000
+ 85325 words of font info for 155 fonts, out of 8000000 for 9000
+ 372 hyphenation exceptions out of 8191
+ 38i,15n,45p,425b,458s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}<
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/rsfs/rsfs10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/us
+yr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/urw/times/utmri8a.pfb>
+Output written on mainEcmor.pdf (20 pages, 1342508 bytes).
+PDF statistics:
+ 140 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+

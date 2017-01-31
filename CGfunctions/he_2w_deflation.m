@@ -15,7 +15,7 @@ nyi=1;
 nx=sz;
 ny=sz;
 iteration=500;
-e=0;
+e=1;
 num='5';
 Lx=sz;
 Ly=sz;
@@ -24,7 +24,7 @@ for k = 11
     k
 tol = 10^-k;
 
-for per=[8]
+for per=[5]
    
 close all
 per
@@ -63,14 +63,14 @@ for i=1:sz
 
     Z((1:sz)+sz*(i-1),i)=1;
 end
-Z=eye(11);
+%Z=eye(sz*sz);
 
 for i=1:2:sz
  rock.perm(1+lsize*(i-1):lsize*i)  = repmat(10^(-per), [lsize, 1]);
 end
 
 z1s=size(Z)
-spy(Z)
+
 
 ysz=sz/8;
 hy=0;
@@ -141,7 +141,7 @@ display(fluid);
 
 for s=5
     well(1)=-1;
-    well(2)=4;
+    well(2)=1;
  xi=rand(nx*ny,1);
 
 wtype    = {'bhp', 'bhp'};
@@ -196,16 +196,20 @@ p=sol.pressure;
  size(A)
 % clf;
 xb=A\b;
-res=p-xb;
-
+resb=p-xb;
+%[xd,flag,res,its]=DICCG_01_25_2(A,b,Z,tol,1000);
+%resd=xd-xb;
 figure(s+per+200)
 [ht]=plotingsolution(G,W,'DICCG', p,1) ;
 colorbar
  [ht]=plotingsolution(G,W,'backslash',xb,2);
  colorbar
 figure(s+per+300)
- [h1]=plotingsolution(G,W,'bs-DICGCG',res,2);
-colorbar
+ [h1]=plotingsolution(G,W,'bs-DICGCG',xb-p,2);
+ colorbar
+%  figure(s+per+300)
+%  [h1]=plotingsolution(G,W,'DICGCG_m',xd-xb,1);
+% colorbar
 
 
 

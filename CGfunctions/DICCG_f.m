@@ -105,7 +105,7 @@ end
 %check size of Z, matrix A contains wells also
 %clear A
 %A=A1(1:size(Z,1),1:size(Z,2));
-full(A)
+%full(A)
 size(A)
 if size(A) == size(Z)
     Z1=Z;

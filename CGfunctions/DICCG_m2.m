@@ -103,13 +103,22 @@ if (nargin < 5) || isempty(maxit)
 end
 size(A)
 size(Z)
-if size(A) == size(Z)
-    Z1=Z;
-else
-    Z1=eye(size(A));
-    Z1(1:size(Z,1),1:size(Z,2))=Z;
-end
-  Z=Z1;
+% if size(A) == size(Z)
+%     Z1=Z;
+% else
+%     Z1=eye(size(A));
+%     Z1(1:size(Z,1),1:size(Z,2))=Z;
+% end
+%  Z=Z1;
+ if size(A) == size(Z)
+     A1=A;
+     b1=b;
+ else
+     A1=eye(size(Z));
+     A1=Z(1:size(Z,1),1:size(Z,1));
+     b1=b(1:size(Z,1));
+ end
+  A=A1;
 
 
 E = Z' * A * Z;

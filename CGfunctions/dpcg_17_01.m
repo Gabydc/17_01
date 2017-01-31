@@ -105,7 +105,7 @@ E=A*Z;
 E=Z'*E;                            %Galerkin matrix
 EI=sparse(inv(E));
 Q=EI*Z';
-P=I-A*Q;
+P=eye(size(A*Q))-A*Q;
 
 
 % Check for all zero right hand side vector => all zero solution

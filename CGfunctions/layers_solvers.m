@@ -30,7 +30,7 @@ xi1(1:size(b,1),1)=rand;
 [x2,iter2,e2,hline2]=CGCh(a,b,xi,maxit,tol,L);
 %[x3,iter3,e3,hline3]=CCGCh(a,b',xi',maxit,tol,z,L,0,'uno',l,dir,def,fc);
 [x3,iter3,e3,hline3]=CGCh(a,b,xi,maxit,tol,L);
-[xd,fl2,rr2,it2,rv2] = DICCG_m2(a,b',z,tol,maxit,L,L',xi');
+[xd,fl2,rr2,it2,rv2] = DICCG_m(a,b',z,tol,maxit,L,L',xi');
 [x4,iter4,e4,hline4]=DCGChF(a,b,xi,maxit,tol,z,L);
 
 ylabel('log(Error)')

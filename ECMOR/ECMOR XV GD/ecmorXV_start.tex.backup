@@ -1,0 +1,922 @@
+\documentclass{ecmorXV}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{natbib}
+\usepackage{graphicx}
+\begin{document}
+
+\section{Introduction}
+
+ In this report, we study fast and robust iterative solvers for large systems of  linear equations resulting from reservoir simulation trough porous media. We propose the use of preconditioning and deflation techniques based on information obtained from the system to reduce the time spent in the solution of the linear system.\\
+ We consider incompressible single-phase flow in a layered model with large variations in the permeability coefficients and the SPE10 benchmark model.\\
+ In the first section, we present the problem definition, together with a description of the theory and governing equations of reservoir simulation. We also present the numerical methods implemented for the solution of this system of equations. \\
+ In Section \ref{syseq} we give some theory about the linear solver used for this report and we introduce preconditioning and deflation techniques. We also demonstrate two lemmas that will help us in the choice of good deflation vectors, necessary for the deflation techniques.\\
+ In Section \ref{numexp} we present numerical experiments. We describe the problem that is studied, the solver that is used and the preconditioning and deflation techniques used for the speedup of the solver. The results are also presented in this section. \\
+ Finally, we end with the conclusions.
+
+\section{Method and/or Theory}
+\subsection{Flow through porous media}
+The equations describing single phase flow through porous media are the mass balance equation and 
+ Darcy's law,
+corresponding to momentum conservation \cite{Jansen13}.\\
+Darcy's law is given by:
+$$\mathbf{v}=-\frac{\mathbf{K}}{\mu}(\nabla p-\rho g\nabla d),$$
+And the mass balance equation is given by:
+\begin{equation}\label{eq:mb}
+ \nabla \cdot (\alpha \rho \mathbf{v})+\alpha\frac{\partial \rho \phi}{\partial t}-\alpha \rho q =0,
+\end{equation}
+where $\alpha$ is the cross-sectional area $A$ for 1D, the reservoir height $h$ for 2D, 
+and 1 for 3D, $\rho,$ $\mu$ are the fluid density and viscosity, ${p}$ is 
+the pressure, $\mathbf{K}$ is the rock permeability, $g$ is the constant of gravity, $d$ is the reservoir depth,
+$\phi$ is the rock porosity, $c_l$ is the liquid compressibility and $q$ are the sources.
+Combining the previous equations we get:
+\begin{equation}\label{eq:ceq}
+ -\nabla
+\cdot \left[\frac{\alpha \rho}{\mu}\mathbf{K}(\nabla p-\rho g \nabla d)\right]+\alpha \frac{\partial(\rho
+\phi)}{\partial t}-\alpha \rho q=0.
+\end{equation}
+The variables $\rho$, $\phi$, $\mu$ and $\mathbf{K}$ may be functions of the pressure $p$. 
+Usually the dependence of 
+$\mu$ and $\mathbf{K}$ on $p$ is small enough that they can be assumed to be pressure independent parameters.\\
+The relation between $\phi$ 
+and $p$ is given by the rock compressibility:
+\begin{equation} \label{eq:phip}
+ c_r=\frac{1}{\phi}\frac{\partial \phi}{\partial p}.
+\end{equation}
+\\
+The relationship between $\rho$ and $p$ is called the liquid compressibility, it follows from the equation 
+of state of a liquid, and can be written as:
+\begin{equation}\label{eq:rhop}
+ c_l(p)=-\frac{1}{V}{\frac{\partial V}{\partial p}}\arrowvert _{T_0}
+ =\frac{1}{\rho}{\frac{\partial \rho}{\partial p}}\arrowvert _{T_0},
+\end{equation}
+with $T_0$ a constant reference temperature. \\
+The accumulation term $\frac{\partial(\rho \phi)}{\partial t}$ of Equation \eqref{eq:ceq} can be rewritten
+as:
+\begin{equation*}
+ \frac{\partial(\rho \phi)}{\partial t}=\rho\frac{\partial \phi}{\partial t}+\phi\frac{\partial \rho }{\partial t}
+ =\rho\frac{\partial \phi}{\partial p}\frac{\partial p}{\partial t}+\phi\frac{\partial\rho }{\partial p}
+\frac{\partial p}{\partial t}
+ =\phi\rho\left[\frac{1}{\phi}\frac{\partial \phi}{\partial p}+\frac{1}{\rho}\frac{\partial\rho }{\partial p}
+\right]\frac{\partial p}{\partial t},
+ \end{equation*}
+combining the equation above with Equation \eqref{eq:phip} and \eqref{eq:rhop} we have:
+\begin{equation}\label{eq:acc}
+ \frac{\partial(\rho \phi)}{\partial t}=\phi\rho\left[c_r+c_l\right]\frac{\partial p}{\partial t}=
+ \phi\rho c_t \frac{\partial p}{\partial t},
+ \end{equation}
+where $c_t=c_l+c_r$. \\
+Substituting \eqref{eq:acc} into \eqref{eq:ceq} we obtain:
+\begin{equation}\label{eq:ceq1}
+ -\nabla \cdot \left[\frac{\alpha }{\mu}\vec{K}(\nabla p-g \nabla d)\right]+\alpha 
+\phi c_t\frac{\partial p}{\partial t}-\alpha  q=0,
+\end{equation}
+which is a nonlinear partial differential equation (PDE) for the variable $p$ as function of the
+independent variables $x,y$ and $t$. \
+Assuming isotropic permeability ($k=K_x=K_y=K_z$), small rock and fluid compressibilities, uniform reservoir 
+thickness and absence of gravity forces Equation \eqref{eq:2D} can be rewritten as:
+\begin{equation} \label{eq:ceq2}
+ -\frac{h}{\mu}\frac{\partial}{\partial x}\left(k\frac{\partial p}{\partial x}\right)
+ -\frac{h}{\mu}\frac{\partial}{\partial y}\left(k\frac{\partial p}{\partial y}\right)
+ -\frac{h}{\mu}\frac{\partial}{\partial y}\left(k\frac{\partial p}{\partial z}\right)
+ +\phi_0c_t\frac{\partial p}{\partial t}-hq=0.
+\end{equation}
+
+\subsection{Well Model}\label{wellm}
+In reservoirs, wells are typically drilled to extract or inject fluids. If the injection or production rates are known it is necessary to know the well pressure. Meanwhile, if the well pressure is known, the objective will be to compute the flow rate in or out of the reservoir. Fluids are injected into a well at constant surface rate or constant bottom-hole pressure, and are produced at constant bottom-hole pressure or a constant surface rate.\\
+Close to a well, the pressure presents nonlinear gradients in the radial direction. In reservoir simulation, it is possible to capture this effect with a very fine grid. It is also possible to use models that take into account an additional pressure drop based on analytical or semi-analytical solutions for the flow around the well. A widely used model is Peacemans's model, that takes into account the above-mentioned pressure drop. This is a logarithmic relationship, where the pressure drop is due to a steady-state radial flow towards a well in the center of a cell.  
+ Taking the radial distance from a production well as ${r}$ operating at bottom-hole pressure in an homogeneous reservoir with permeability $K$, and a fluid viscosity $\mu$, the pressure drop between the cell pressure $p$ and the well bottom-hole pressure $p_{well}$ in a cell of height $h$ is given by \cite{Jansen13,Lie13}:
+\begin{equation}\label{eq:peac}
+    {p}-{p}_{well}=-\frac{\mu q}{2\pi Kh}ln\left( \frac{{r}}{r_{well}}\right)=-\frac{q}{J_{well}},
+\end{equation}
+that is obtained from Darcy's law. The negative value of the flow rate $q$ indicates production, while, a positive value is for injection. $J_{well}$ is known as the well index or productivity index (PI) for a producer, and well injectivity index (WI) for injectors. 
+The model presented in Equation \eqref{eq:peac} is valid only for a restricted set of assumptions, but it has proven to be very useful basis model for simple vertical wells. 
+\subsubsection*{Incompressible flow.}
+If the fluid and rock compressibilities are small enough, they can be ignored and 
+equation \eqref{eq:trans} becomes:
+\begin{equation}\label{eq:transinc}
+ \mathbf{T}\mathbf{p}=\mathbf{q}.
+\end{equation}
+\section{Iterative solution methods}\label{syseq}
+The solution of partial differential equations PDE's 
+can be performed with numerical methods. Some of these methods, as the finite differences method, 
+transform our equations into a linear 
+system of the form:
+\begin{gather*}
+a_{11}x_{1}+\dots+a_{1n}x_{n}=b_{1},\\
+\dots\\
+a_{n1}x_{1}+....+a_{nn}x_{n}=b_{n},
+\end{gather*}
+which is written in matrix form as:
+\begin{equation}\label{eq:linsys}
+ \mathbf{A}\mathbf{x}=\mathbf{b}.
+\end{equation}
+Matrix $\mathbf{A}$ can have a structure that might be useful while solving the linear system, 
+examples of structure are:
+\begin{itemize}
+\item[] Symmetry: $\mathbf{A}^T=\mathbf{A}.$
+\item[] Band: $a_{ij}\neq 0$ if $i-m_l\leq j \leq i+m_u$, with $m_l,m_u$ two non-negative integers, and $a_{ij}= 0$ elsewhere.
+\item[] Positive Definiteness: $(\mathbf{A}\mathbf{x},\mathbf{x})>0, \qquad \forall \mathbf{x} \in \mathbb{R}^n, \qquad \mathbf{x}\neq0.$
+\item[] Symmetric Positive Definiteness $SPD$. If $\mathbf{A}$ is symmetric and Positive Definite.
+\end{itemize}
+System $\eqref{eq:linsys}$ can be solved with direct or iterative methods. Direct methods achieve a final solution, 
+while the iterative ones
+are stopped if the error is less than a given value. The convergence of an iterative method is not always
+guaranteed.\\
+Some of the iterative methods that can be used are: Jacobi, Gauss Seidel, and if the
+matrix is $SPD$ we can use the Conjugate Gradient (CG) method.
+This section is devoted to iterative methods, in particular CG, that is the
+method that we are going to use in our experiments (see Section \ref{numexp}). \\
+In this section, we also describe the Preconditioning and Deflation techniques 
+for the acceleration of the CG method.
+
+\subsection*{Krylov subspace Methods}
+If we have two subspaces $\mathcal{K}_k,$ $\mathcal{L}_k$ of $\mathbb{R}^n$ and we want to solve 
+the Equation \eqref{eq:linsys}, 
+with $\mathbf{A} \in \mathbb{R}^{n\times n}$ we can use a projection method onto $\mathcal{K}_k$.
+This method allows us to find an approximate solution $\mathbf{x}^k$ from an arbitrary initial guess 
+solution $\mathbf{x}^0$. This approximate solution lies in the Krylov subspace of dimension $k$ of the matrix $\mathbf{A}$ 
+and residual $\mathbf{r}^0$,
+\begin{equation*}
+\mathbf{x}^k \in \mathbf{x}^0+\mathcal{K}_k(\mathbf{A},\mathbf{r}^0),
+\end{equation*}
+with $\mathcal{K}_k(\mathbf{A},\mathbf{r}^0)$ defined as:
+\begin{equation*}
+\mathcal{K}_k(\mathbf{A},\mathbf{r}^0)=span\{\mathbf{r}^0,\mathbf{A}\mathbf{r}^0,\dots,\mathbf{A}^{k-1}\mathbf{r}^0\}.
+\end{equation*}
+Where the residual $\mathbf{r}^k=\mathbf{b}-\mathbf{A}\mathbf{x}^k$ is orthogonal to the subspace $\mathcal{L}_k$, with 
+\begin{equation*}
+ \mathbf{x}^{k+1}=\mathbf{x}^k+\mathbf{B}^{-1}r^k, \qquad \mathbf{r}^k=\mathbf{b}-\mathbf{A}\mathbf{x}^k.
+\end{equation*}
+The subspace $\mathcal{L}_k$ is chosen depending on the Krylov subspace method that is used.
+
+
+\subsection{Conjugate Gradient Method}
+The Conjugate Gradient (CG) method is a Krylov subspace method for Symmetric Positive Definite $SPD$ matrices, such that
+\begin{equation}\label{eq:CGm}
+ ||\mathbf{x}-\mathbf{x}^k||_\mathbf{A}, \footnote{$||\mathbf{x}||_\mathbf{A}= \sqrt{(\mathbf{x},\mathbf{x})_\mathbf{A}}=\sqrt{\mathbf{x}^T\mathbf{A}\mathbf{x}}.$} 
+\end{equation}
+is minimal, with $\mathbf{x}$ the solution of the system and $\mathbf{x}^k$ the $k-th$ iteration. \\
+Given an initial guess $\mathbf{x}^0$ the next approximations can be computed following the search directions $\mathbf{p}^i$ 
+$$\mathbf{x}^{k+1}=\mathbf{x}^k+\alpha^k\mathbf{p}^k.$$ 
+For the CG method, the search directions $\mathbf{p}^k$ are orthogonal with 
+respect to the $\mathbf{A}$ inner product, i.e.
+$$(\mathbf{A}\mathbf{p}^k,\mathbf{p}^j)=0, \qquad k\neq j,$$
+and the residuals form an orthogonal set, i.e.
+$$(\mathbf{r}^k,\mathbf{r}^j)=0, \qquad k \neq j.$$
+The constant $\alpha^k$ that satisfies \eqref{eq:CGm} is given by:
+$$\alpha^k=\frac{(\mathbf{r}^{k},\mathbf{r}^{k})}{(\mathbf{A}\mathbf{p}^k,\mathbf{p}^k)},$$
+and the new search directions can be computed via the residuals,
+$$\mathbf{p}^{k+1}=\mathbf{r}^{k+1}+\beta_k\mathbf{p}^k,$$
+where 
+$$ \beta_k=\frac{(\mathbf{r}^{k+1},\mathbf{r}^{k+1})}{(\mathbf{r}^k,\mathbf{r}^k)}.$$
+After $k+1$ iterations of the $CG$ method, the error of the iteration will be bounded by:
+\begin{equation}\label{eq:conv}
+ ||\mathbf{x}-\mathbf{x}^{k+1}||_\mathbf{A}\leq 2||\mathbf{x}-\mathbf{x}^{0}||_\mathbf{A} 
+ \left( \frac{\sqrt{\kappa_2(\mathbf{A})}-1}{\sqrt{\kappa_2(\mathbf{A})}+1} \right)^{k+1}
+ \footnote{The condition number $\kappa_2(\mathbf{A})$ is defined as  $\kappa_2(\mathbf{A})=
+ \frac{\sqrt{\lambda_{max}(\mathbf{A}^T\mathbf{A})}}{\sqrt{\lambda_{min}(\mathbf{A}^T\mathbf{A})}}$. 
+ If $\mathbf{A}$ is SPD, $\kappa_2(\mathbf{A})=\frac{\lambda_{max}(\mathbf{A})}{\lambda_{min}(\mathbf{A})}$.}.
+ \end{equation}\subsection{Preconditioning}
+If we want to accelerate the convergence of an iterative method, we can transform the system into
+another one containing a better spectrum. This can be done by multiplying the original system \eqref{eq:linsys} by a matrix $\mathbf{M}^{-1}.$
+\begin{equation}\label{eq:precon}
+ \mathbf{M}^{-1}\mathbf{A}\mathbf{x}=\mathbf{M}^{-1}\mathbf{b}.
+\end{equation}
+The new system has the same solution but provides a substantial improvement on the spectrum. 
+For this preconditioned system, the convergence is given by:
+\begin{equation}\label{eq:convp}
+ ||\mathbf{x}-\mathbf{x}^{k+1}||_\mathbf{A}\leq 2||\mathbf{x}-\mathbf{x}^{0}||_\mathbf{A} 
+ \left( \frac{\sqrt{\kappa(\mathbf{M}^{-1}\mathbf{A})}-1}{\sqrt{\kappa(\mathbf{M}^{-1}\mathbf{A})}+1} \right)^{k+1}.
+\end{equation}
+$\mathbf{M}$ is a $SPD$ matrix chosen such that $\kappa(\mathbf{M}^{-1}\mathbf{A})\leq \kappa(\mathbf{A}),$ and $\mathbf{M}^{-1}b$ is easy to compute.
+
+\subsection{Deflation}\label{def}
+Deflation is used to annihilate the effect of extreme eigenvalues on the convergence of an iterative method \cite{Vuik99}. 
+\\Given an $SPD$ matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$, the deflation matrix $\mathbf{P}$ is defined as follows \cite{Tang08}:
+$$\mathbf{P}=\mathbf{I}-\mathbf{A}\mathbf{Q}, \qquad \mathbf{P} \in \mathbb{R}^{n \times n}, \qquad \mathbf{Q} \in \mathbb{R}^{n \times n},$$
+where
+$$\mathbf{Q}=\mathbf{Z}\mathbf{E}^{-1}\mathbf{Z}^T, \qquad \mathbf{Z} \in \mathbb{R}^{n \times m}, \qquad \mathbf{E} \in \mathbb{R}^{m \times m}, $$
+with
+$$\mathbf{E}=\mathbf{Z}^T\mathbf{A}\mathbf{Z}.$$
+The matrix $\mathbf{E}$ is known as the $Galerkin$ or $coarse$ matrix that has to be invertible, 
+in this case $\mathbf{A}$ is $SPD$ and if $\mathbf{Z}$ is full rank then $\mathbf{E}$ is invertible. 
+The full rank matrix $\mathbf{Z}$ is called the $deflation-subspace$ matrix, 
+and it's $l<n$ columns are the
+$deflation$ vectors or $projection$ vectors.\\
+Some properties of the previous matrices are \cite[pag. 27]{Tang08}:
+\begin{enumerate}\label{defprop}
+ \item[a)] $\mathbf{E}^T=\mathbf{E}, \qquad symmetric.$
+ \item[b)] $\mathbf{Q}^T=\mathbf{Q}=\mathbf{Q}\mathbf{A}\mathbf{Q}, \qquad symmetric.$
+ \item[c)] $\mathbf{Q}\mathbf{A}\mathbf{Z}=\mathbf{Z}.$
+ \item[d)] $\mathbf{P}\mathbf{A}\mathbf{Q}=\mathbf{0}^{n\times n}.$
+ \item[e)] $\mathbf{P}^2=\mathbf{P}.$
+ \item[f)] $\mathbf{A}\mathbf{P}^T=\mathbf{P}\mathbf{A}.$
+ \item[g)] $(\mathbf{I}-\mathbf{P}^T)\mathbf{x}=\mathbf{Q}\mathbf{b}.$
+ \item[h)] $\mathbf{P}\mathbf{A}\mathbf{Z}=\mathbf{0}^{n\times m}.$
+ \item[i)] $\mathbf{P}^T\mathbf{Z}=\mathbf{0}^{n\times m}.$
+ \item[j)] $\mathbf{P}\mathbf{A}$ is $SPSD$\footnote{Symmetric Positive Semi-Definite, $(\mathbf{A}\mathbf{x},\mathbf{x})\geq 0$, for all $\mathbf{x}$.}.
+\end{enumerate}
+We can split the vector $\mathbf{x}$ as:
+\begin{equation}\label{eq:splx}
+    \mathbf{x}=\mathbf{I}\mathbf{x}-\mathbf{P}^T\mathbf{x}+\mathbf{P}^T\mathbf{x}=(\mathbf{I}-\mathbf{P}^T)\mathbf{x}+\mathbf{P}^T\mathbf{x}.
+\end{equation}
+Multiplying the expression above by $\mathbf{A}$, using the properties above, we have:
+\begin{align*}
+\mathbf{A}\mathbf{x}&=\mathbf{A}(\mathbf{I}-\mathbf{P}^T)\mathbf{b}+\mathbf{A}\mathbf{P}^T\mathbf{x},\qquad&Property:\\
+\mathbf{A}\mathbf{x}&=\mathbf{A}\mathbf{Q}\mathbf{b}+\mathbf{A}\mathbf{P}^T\mathbf{x},&g)\\
+\mathbf{b}&=\mathbf{A}\mathbf{Q}\mathbf{b}+\mathbf{P}\mathbf{A}\mathbf{x},&f),
+\end{align*}
+multiplying by $\mathbf{P}$ and using the properties $\mathbf{P}\mathbf{A}\mathbf{Q}=
+\mathbf{0}^{n\times n}$ and $\mathbf{P}^2=\mathbf{P}$, properties $d$) and $e$), we have:
+\begin{align}\label{eq:defsys}
+\mathbf{P}\mathbf{b}&=\mathbf{P}\mathbf{A}\mathbf{Q}\mathbf{b}+\mathbf{P}^2\mathbf{A}\mathbf{x},\nonumber \\
+\mathbf{P}\mathbf{b}&=\mathbf{P}\mathbf{A}\mathbf{x},
+\end{align}
+where $\mathbf{P}\mathbf{b}=\mathbf{P}\mathbf{A}\mathbf{x}$ is the deflated system. Since 
+$\mathbf{P}\mathbf{A}$ is singular, the solution $\mathbf{x}$ can contain
+components of the null space of $\mathbf{P}\mathbf{A}$. A solution of this system, called deflated
+solution, is denoted by $\mathbf{\hat{x}}$.
+The equation to solve to obtain $\mathbf{\hat{x}}$ is:
+\begin{align}\label{eq:defsol}
+\mathbf{P}\mathbf{b}&=\mathbf{P}\mathbf{A} \hat{\mathbf{x}}.
+\end{align}
+As mentioned above, solution of Equation \eqref{eq:defsys} can contain components of $\mathcal{N}(\mathbf{P}\mathbf{A})$. Thereafter, the solution of Equation \eqref{eq:defsol},
+$\mathbf{\hat{x}}$ can be decompose as:
+\begin{equation}\label{eq:xxy}
+\mathbf{\hat{x}}=\mathbf{x}+ \mathbf{y},
+\end{equation}
+with $\mathbf{y} \in \mathcal{R}(\mathbf{Z})\subset \mathcal{N}(\mathbf{P}\mathbf{A}),$ and $\mathbf{x}$ solution of Equation \eqref{eq:linsys}.\\
+Note. If $\mathbf{y} \in \mathcal{R}(\mathbf{Z}),$ then $$\mathbf{y}=\sum^{m}_{i=1}\alpha_i \mathbf{z}_i,$$\\
+ \begin{equation}\label{eq:paz}
+ \mathbf{P}\mathbf{A}y=\mathbf{P}\mathbf{A}(\mathbf{z}_1\alpha_1 +...+ \mathbf{z}_m\alpha_m)=\mathbf{P}\mathbf{A}\mathbf{Z}\mathbf{\alpha},\end{equation}
+ from \ref{defprop} h) $\mathbf{P}\mathbf{A}\mathbf{Z}=\mathbf{0}^{n\times l},$ then 
+ \begin{equation}\label{eq:pay}
+ \mathbf{P}\mathbf{A}y=0.
+ \end{equation}
+Therefore $\mathcal{R}(\mathbf{Z})\subset \mathcal{N}(\mathbf{P}\mathbf{A}).$ \\
+Multiplying Equation \ref{eq:xxy} by $\mathbf{P}^T$ we obtain:
+$$\mathbf{P}^T\mathbf{\hat{x}}=\mathbf{P}^T\mathbf{x}+\mathbf{P}^T\mathbf{y},$$
+combining Equation \eqref{eq:pay} with \ref{defprop} f), we have:
+ \begin{equation*}
+ \mathbf{P}\mathbf{A}y=\mathbf{A}\mathbf{P}^Ty=0.
+ \end{equation*}
+ Therefore
+  \begin{equation}\label{eq:ptx}
+\mathbf{P}^T\mathbf{\hat{x}}=\mathbf{P}^T\mathbf{x}.
+ \end{equation}
+Substitution of Equation \eqref{eq:ptx} and \ref{defprop} g) in Equation \eqref{eq:splx} leads to:
+\begin{equation}\label{eq:xfromxh}
+    \mathbf{x}=\mathbf{Q}\mathbf{b}+\mathbf{P}^T\mathbf{\hat{x}}, 
+\end{equation}
+that give us a relation between $\mathbf{\hat{x}}$ and $\mathbf{x}$.
+ 
+\subsubsection{Deflated CG Method}
+To obtain the solution of the linear system \eqref{eq:linsys}, we solve the deflated system:
+\begin{equation}\label{eq:deflsys}
+    \mathbf{P}\mathbf{A}\hat{\mathbf{x}}=\mathbf{P}\mathbf{b}.
+\end{equation}
+with the CG method, for a deflated solution $\hat{\mathbf{x}}$. 
+Thereafter, the solution $\mathbf{x}$ of the original system is obtained from \eqref{eq:xfromxh}:
+$$\mathbf{x}=\mathbf{Q}\mathbf{b}+\mathbf{P}^T\hat{\mathbf{x}}.$$
+\subsubsection*{Deflated PCG Method}
+The deflated linear system can also be preconditioned by an $SPD$ matrix $\mathbf{M}$.\\
+The deflated preconditioned system that will be solved with CG is \cite[pag. 30]{Tang08}:
+$$\tilde{\mathbf{P}} \tilde{\mathbf{A}} \hat{\tilde{\mathbf{x}}}=\tilde{\mathbf{P}}\tilde{\mathbf{b}},$$
+where:
+\begin{equation*}
+ \tilde{\mathbf{A}}=\mathbf{M}^{-\frac{1}{2}}\mathbf{A}\mathbf{M}^{-\frac{1}{2}}, \qquad \hat{\tilde{\mathbf{x}}}=\mathbf{M}^{\frac{1}{2}}\hat{\mathbf{x}}, \qquad
+ \tilde{\mathbf{b}}=\mathbf{M}^{-\frac{1}{2}}\mathbf{b}
+\end{equation*}
+This method is called the Deflated Preconditioned Conjugate Gradient $DPCG$ method, and the error is bounded by:
+\begin{equation*}
+ ||\mathbf{x}-\mathbf{x}^{i+1}||_\mathbf{A}\leq 2||\mathbf{x}-\mathbf{x}^{0}||_\mathbf{A} \left( \frac{\sqrt{\kappa_{eff}(\mathbf{M}^{-1}\mathbf{P}\mathbf{A})}-1}{\sqrt{\kappa_{eff}(\mathbf{M}^{-1}\mathbf{P}\mathbf{A})}+1} \right)^{i+1},
+\end{equation*}
+with $\kappa_{eff}=\frac{\lambda_{max}(M^{-1}PA)}{\lambda_{min}(M^{-1}PA)},$ the effective condition 
+number and $\lambda_{min}(M^{-1}PA)$ the smallest non-zero eigenvalue of $M^{-1}PA$.
+\subsubsection{Choices of Deflation Vectors}
+The deflation method is used to treat the most unfavorable eigenvalues
+of $\mathbf{A}$. If the matrix $\mathbf{Z}$ contains eigenvectors corresponding to the unfavorable 
+eigenvalues, the convergence of the 
+iterative method is achieved faster. However, to obtain and to apply the eigenvectors is costly in most 
+of the cases.
+Therefore, a good choice of the matrix $\mathbf{Z}$ that does not contain the eigenvectors is essential
+for the acceleration of the convergence.\\
+A good choice of the deflation vectors is usually problem dependent. Available information on the system is, in general,
+used to obtain these vectors.
+Most of the techniques used to choose deflation vectors are based on approximating eigenvectors, 
+recycling \cite{Clemens04}, subdomain deflation vectors \cite{Vuik02} or multigrid and multilevel based deflation techniques \cite{Tang09,Smith96}. 
+A summary of these techniques is given below.
+\begin{description}
+ \item [Recycling Deflation.] A set of vectors previously used is reused to build the deflation-subspace 
+ matrix \cite{Clemens04}. 
+The vectors could be, for example, $q-1$
+solution vectors of the linear system with different right-hand sides or of different time steps.
+The matrix $\mathbf{Z}$ containing this solutions will be:
+$$\mathbf{Z}=[\mathbf{x}^{(1)},\mathbf{x}^{(2)},...,\mathbf{x}^{(q-1)}].$$
+ \item [Subdomain Deflation.] The domain is divided into several subdomains,
+ each corresponding to one or more deflation vectors.
+For each subdomain, there is a deflation vector that has ones for points in the 
+subdomain and zeros for points outside \cite{Vuik02}.
+ \item [Multi Grid and Multilevel Deflation.] For the multigrid and multilevel methods, 
+ there are matrices called prolongation and restriction matrices that
+allow us to pass from one level or grid to another. 
+These matrices are used as the deflation-subspace matrices ($\mathbf{Z}$) \cite{Tang09}.
+\end{description}
+
+\section{Numerical experiments.}\label{numexp}
+These experiments are performed in order to understand the behavior of the deflation method and to find 
+good deflation vectors for the given problems.\\
+In the present section, we give a general overview of the experiments that we performed, but the specifications
+ are presented below for each problem separately.\\
+ The reference solution is obtained with a direct solution method and plotted. This solution is visually compared with the results obtained with DICCG to see if the approximation is similar.\\
+The experiments are performed to simulate flow through porous media with a porosity of 0.2. 
+A single-phase model is
+studied for a fluid with the following properties:
+\begin{itemize}
+ \item $\mu=1 cpoise$
+ \item $\rho=1014 kg/m^3$
+\end{itemize}
+The rock permeability varies in each case. For the first set of problems, homogeneous permeability is used.
+Then, we use layers with different permeabilities. Finally, we use the SPE 10 model, 
+which has large permeability variations (7-12 orders of magnitude). For our experiments, first we take the
+$2^{nd}$ layer of this model, where the variation of permeabilities is of 7 orders of magnitude. Then we used the complete model that consists of 85 layers.
+For the wells, we use the Peaceman model, described in Section \ref{wellm}.
+\subsubsection*{The model}
+This part is devoted to incompressible flow model $\mathbf{T}\mathbf{p}=\mathbf{q}$ (see Section \ref{PD}). 
+\\In these experiments a Cartesian grid with different grid sizes is used. Wells or sources are added to the system. 
+Neumann and Dirichlet boundary conditions are imposed. For some problems, a pressure drop is 
+imposed in the $y$ direction (Dirichlet boundary condition), and for others, the no-flux(Neumann) boundary condition 
+is used.
+More specifications are presented below for each problem. 
+The matrices corresponding to the linear systems $\mathbf{A}$ and right-hand sides $b$ are obtained with the Matlab Reservoir Simulation Toolbox (MRST) \cite{Lie13}.
+\subsubsection*{The solver}
+The solution of the system is approximated with ICCG (Conjugate Gradient preconditioned with Incomplete
+Cholesky) and DICCG (Deflated Conjugate Gradient preconditioned with Incomplete Cholesky).\\
+For the DICCG method, the deflation vectors are chosen as solutions of the system with 
+various well configurations and boundary conditions. For each configuration, we solve the system with ICCG and we use these solutions as deflation vectors.
+The tolerance or stopping criterium is taken as the 2-norm of the residual for the $k^{th}$ iteration divided by 
+the 2-norm of the right-hand side of the preconditioned system: 
+$$\frac{||\mathbf{M}^{-1}r^k||_2}{||\mathbf{M}^{-1}b||_2}\leq \epsilon.$$
+The stopping criterium is varied for each problem. In particular, for the SPE10 problem with one layer, the dependence on the accuracy of the snapshots for the DICCG method is studied. 
+\subsubsection*{Snapshots}
+As mentioned above, for the DICCG method we need a set of deflation vectors, that in our case are solutions of the system with various well configurations and boundary conditions. This solutions called snapshots are obtained with ICCG method, the tolerance used is given for each problem. 
+For all the experiments we perform, we use one of the following configuration of wells and the snapshots described below.
+\subsubsection*{\emph{Configuration 1}}
+For the \emph{Configuration 1}, four wells are positioned one-third apart from each other and from the boundaries. The first four snapshots ($z_1-z_4$) are obtained setting only one well different from zero  and taking no flux conditions in the right and left boundaries and homogeneous Dirichlet conditions in the other boundaries. A fifth snapshot is obtained setting all the wells to zero and setting a drop pressure in the vertical direction. The system to solve will be the system containing all the wells with values different from zero and the Dirichlet conditions as used for the fifth snapshot. A summary of the snapshots is presented below.
+\begin{itemize}
+\item[] Configuration 1:
+\item[] Boundary conditions for the first 4 snapshots: \\
+$P(y=1) =  P(y=ny) = 0$ bars, $\frac{\partial P(x=1)}{\partial n}=\frac{\partial P(x=nx)}{\partial n}=0$.
+ \item[] $\mathbf{z}_1$: W1 = -5 bars, W2 = W3 = W4 = 0, 
+\item[] $\mathbf{z}_2$: W2 = -5 bars, W1 = W3 = W4 = 0.
+\item[] $\mathbf{z}_3$: W3 = +5 bars, W1 = W3 = W4 = 0.
+\item[] $\mathbf{z}_4$: W4 = +5 bars, W1 = W2 = W3 = 0.
+\item[] Boundary conditions for the 5th snapshot: \\
+P(y=1) = 0 bars, P(y=ny) = 3 bars, $\frac{\partial P(x=1)}{\partial n}=\frac{\partial P(x=nx)}{\partial n}=0$.
+ \item[] $\mathbf{z}_5$: W1 =  W2 =  W3 = W4 = 0.
+\item[]  $System$ $configuration$ \\
+Boundary conditions:\\$P(y=1) = 0 bars, P(y=ny) = 3$ bars, $\frac{\partial P(x=1)}{\partial n}=\frac{\partial P(x=nx)}{\partial n}=0$.\\W1 = -5 bars, W2 = +5 bars, W3 = +5 bar, W4 = -5 bar.
+\end{itemize}
+\subsubsection*{\emph{Configuration 2}}
+Four wells are positioned in the corners and one in the center of the domain 
+(see Figure \ref{fig:hop2}). 
+The snapshots ($z_1-z_5$) are obtained solving the problem with various well configurations. The first four snapshots ($z_1-z_4$) are obtained giving a value of zero to one well and non zero values to the other wells. The last snapshot ($z_5$) has the same configuration as the system that we want to solve. For this configuration we use Neumann boundary conditions, thereafter the sum of the values of the wells must be equal to zero for each snapshot.
+The set of snapshots is presented below.\\\
+\begin{itemize}
+\item[] Configuration 2:
+ \item[] $\mathbf{z}_1$: W1 = 0 bars, W2 = W3 = W4 =  -1 bars, W5 = b5 = +3 bars.
+\item[] $\mathbf{z}_2$: W2 = 0 bars, W1 = W3 = W4 = -1 bars, W5 = b5 = +3 bars.
+\item[] $\mathbf{z}_3$: W3 = 0 bars, W1 = W3 = W4 = -1 bars, W5 = b5 = +3 bars.
+\item[] $\mathbf{z}_4$: W4 = 0 bars, W1 = W2 = W3 = -1 bars, W5 = b5 = +3 bars.
+\item[]  $System$ $configuration$
+ \item[] $\mathbf{z}_5$: W1 = W2 = W3 = W4 =  -1 bars, W5 = b5 = +4 bars.
+\end{itemize}
+
+\subsubsection*{\large Homogeneous permeability}
+\normalsize
+For the first set of experiments, flow through porous medium with a homogeneous permeability is studied.
+The permeability is $\sigma=1mD$ in the whole domain.\\
+The snapshots are obtained with ICCG method and the stopping criteria or tolerance is given for each problem. For Case 1, the snapshots are obtained as described in \emph{Configuration 1} and for Case 2 as presented in \emph{Configuration 2}. \\
+
+\large
+\textbf{Case 1}\\
+\normalsize
+\begin{wrapfigure}{r}{6cm}
+\centering 
+\includegraphics[width=4cm,height=4cm,keepaspectratio]
+{perm_ho_1.jpg}
+\caption{ Homogeneous permeability, \emph{Configuration 1} for the wells.}\label{fig:hop}
+\end{wrapfigure}
+We impose no-flux boundary conditions for the vertical boundaries and a pressure difference
+at the horizontal boundaries. 
+The size of the grid is $nx = ny = 32,$ $64$ and $128$ 
+(see Figure \ref{fig:hop}). 
+The snapshots are obtained as presented in \emph{Configuration 2}, with ICCG and a tolerance of $10^{-8}$. The original system is also solved with a tolerance of $10^{-8}$.\\
+\newpage
+\begin{itemize}
+ \item[] Permeability 1 mD.
+ \item[] Grid size $nx \times ny$ grid cells, $nx = ny = 32,$ $64$ and $128$.
+ \item[] W1 = W4= -5 bars.
+  \item[] W2 = W3 = +5 bars.
+  \item[] Boundary conditions: \\$P(y=1) = 0$ bars, $P(y=ny) = 3$ bars,\\ $\frac{\partial P(x=1)}{\partial n}=\frac{\partial P(x=nx)}{\partial n}=0$ .\\
+\end{itemize}
+\textbf{Results}\\
+The condition number is computed in Table \ref{table:condnho} for the matrix $A$, the preconditioned matrix $(M^{-1}A)$ and the deflated and preconditioned matrix $(M^{-1}PA)$ for the smallest problem (32 x 32 grid cells). We observe, for the preconditioned and the preconditioned and deflated systems, a significant reduction in the condition number with respect to the original system.\\ 
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{2.5cm}|p{1.5cm}| } 
+ \hline
+   $\kappa_2(A)$ &931.6\\ 
+   \hline
+ $\kappa_2(M^{-1}A)$  &37.9\\
+ \hline
+  $\kappa_{eff}(M^{-1}PA)$  &22.9\\
+\hline
+\end{tabular}
+\caption{Table with the condition number for the smallest problem (32 x 32 cells).}
+\label{table:condnho}
+\end{table}
+Table \ref{table:ho} shows the number of iterations necessary to achieve convergence 
+for the ICCG and DICCG methods for problems with various grid sizes. The plot of the residual $\left( \frac{||M^{-1}r^k||_2}{||M^{-1}b||_2}\right)$ is presented in Figure \ref{fig:convho1} and the solution in Figure \ref{fig:solho1}. \\
+We observe from Table \ref{table:ho} an increment in the number of iterations necessary to achieve convergence for the ICCG method when the grid size increases. On the contrary, we note that the number of iterations remains unchanged for the DICCG method. Moreover, the convergence is achieved in one iteration for this method, as expected from Lemma 2. The plot of residual $\left( \frac{||M^{-1}r^k||_2}{||M^{-1}b||_2}\right)$ is presented in Figure \ref{fig:convho1}, we observe that the residual reaches a value in the order of $10^{-8}$ after the first iteration for the DICCG method, whereas the residual is diminishing from a value close to $10^{-2}$ until the desired value of $10^{-8}$ for ICCG.\\
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{2cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}| } 
+\hline
+  Grid size & 32 x 32 & 64 x 64 & 128 x 128 \\
+  \hline
+     & Iterations & Iterations &Iterations  \\
+ \hline
+  ICCG  & 22& 41&77\\ 
+  DICCG  & 1 &1& 1\\ 
+ \hline
+\end{tabular}
+\caption{Table with the number of iterations for different grid sizes for the ICCG and DICCG methods.}
+\label{table:ho}
+\end{table}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.4\textwidth}
+ \centering
+\includegraphics[width=5.5cm,height=5.5cm,keepaspectratio]
+{conv_ho_1.jpg}
+\caption{Convergence for the homogeneous problem, 32 x 32 grid cells.}
+\label{fig:convho1}
+\end{minipage}%
+\hspace{1 pt}
+\begin{minipage}{.45\textwidth}
+ \centering
+\includegraphics[width=6.5cm,height=6.5cm,keepaspectratio]{sol_ho_1.jpg}
+\caption{Solution of the homogeneous problem, 32 x 32 grid cells.}
+\label{fig:solho1}
+\end{minipage}
+\end{figure}
+\newpage
+\large
+\textbf{Case 2}\\
+\normalsize
+\begin{wrapfigure}{r}{5cm}
+\centering 
+\includegraphics[width=4cm,height=4cm,keepaspectratio]
+{perm_ho_2.jpg}
+\caption{ Homogeneous permeability, \emph{Configuration 2} for the wells.}\label{fig:hop2}
+\end{wrapfigure}
+We impose no-flux boundary conditions in all boundaries (Neumann). 
+The snapshots are obtained solving the problem with various well configurations as presented in \emph{Configuration 2}. The value of the wells is presented below. The tolerance used is $10^{-8}$ for the snapshots and the original problem.\\
+\begin{itemize}
+\item[] Grid size $nx \times ny$ grid cells, $nx = ny = 32,$ $64$ and $128$.
+ \item[] Permeability 1 mD.
+ \item[] W1 = W2 = W3 = W4 = -1 bars.
+  \item[] W5 = +4 bars.
+  \item[] Neumann boundary conditions.
+\end{itemize}
+\textbf{Results}\\
+Table \ref{table:ho1} shows the number of iterations necessary to achieve convergence 
+for the ICCG and DICCG methods, with a tolerance of $10^{-8}$.\\
+We observe that using solutions of the problem with various well configurations as deflation vectors (\emph{Configuration 2}), the convergence is achieved in only one 
+iteration with the DICCG method, as expected from theory (Lemma 2). As in the previous case we note that the number of iterations increases with the size of the problem for the ICCG method. For the smallest case (32 x 32 grid cells) the plot of the residual and the solution of the problem are presented in Figure \ref{fig:convho2} and \ref{fig:solho2}.
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{2cm}|p{1.7cm}|p{1.7cm}|p{1.7cm}| } 
+\hline
+   Grid size & 32 x 32 & 64 x 64 & 128 x 128 \\
+  \hline
+    Method  & Iterations & Iterations &Iterations  \\
+ \hline
+  ICCG  & 26& 45&77\\ 
+  DICCG  & 1 &1& 1\\ 
+ \hline
+\end{tabular}
+\caption{Table with the number of iterations for different grid sizes for the ICCG and DICCG methods.}
+\label{table:ho1}
+\end{table}
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.4\textwidth}
+ \centering
+\includegraphics[width=5cm,height=5cm,keepaspectratio]
+{conv_ho_2.jpg}
+\caption{Convergence for the homogeneous problem, 32 x 32 grid cells.}
+\label{fig:convho2}
+\end{minipage}%
+\hspace{3 pt}
+\begin{minipage}{.4\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{sol_ho_2.jpg}
+\caption{Solution of the homogeneous problem, 32 x 32 grid cells.}
+\label{fig:solho2}
+\end{minipage}
+\end{figure}
+
+
+\section{Examples (Optional)}
+
+This is the first sentence of the example section.
+
+\section{Results (Optional)}
+\newpage
+\subsubsection*{\large Heterogeneous permeability}
+\normalsize
+\begin{wrapfigure}{r}{5cm}
+\centering 
+\includegraphics[width=4cm,height=4cm,keepaspectratio]
+{perm_he_1.jpg}
+\caption{ Heterogeneous permeability.}\label{fig:hep}
+\end{wrapfigure}
+\normalsize
+In the second set of experiments, we studied flow through porous media with \emph{heterogeneous permeability}. We use 8 layers of the same size, 
+4 layers with one value of permeability $\sigma_1$, followed by a layer with a different permeability value $\sigma_2$. The permeability of one set of layers is set to $\sigma_1=1mD$, the permeability of the other set $\sigma_2$ is changed. Therefore, the contrast in permeability between the layers $(\frac{\sigma_2}{\sigma_1}=\frac{\sigma_2}{1mD})$,
+depends on the value of $\sigma_2$.\\
+We investigate the dependence on the contrast in permeability value between the layers for the ICCG and DICCG methods.
+The permeability of one set of layers is $\sigma_1=1mD$ in all cases, whereas the permeability of the other set of layers varies from $\sigma_2=10^{-1}mD$ to $\sigma_2=10^{-7}mD$. Figure \ref{fig:hep} shows these layers. The tolerance is set as $10^{-11}$ for the snapshots as well as for the original problem.\\ \\
+\large
+\textbf{Case 1}\\
+\normalsize
+The conditions are the same as in $Case$ $1$ in the $homogeneous$ $permeability$ problem. In this section, only a grid of
+$nx = ny = 64$ elements is studied. 
+Table \ref{table:condn} shows the condition number for the matrix $A$, the preconditioned matrix $(M^{-1}A)$ and the deflated and preconditioned matrix $(M^{-1}PA)$ for various permeability contrasts between the layers.\\
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|  } 
+ \hline
+  $\sigma_2$ (mD) & $10^{-1}$& $10^{-3}$ & $10^{-5}$ & $10^{-7}$\\
+  \hline
+   $\kappa(A)$ & $2.6\times10^{3}$ & 2.4$\times10^{5}$&  $2.4\times10^{7}$&  $2.4\times10^{9}$\\ 
+   \hline
+ $\kappa(M^{-1}A)$  &$206.7$&$8.3\times10^{3}$&$8.3\times10^{5}$&$8.3\times10^{7}$\\
+   \hline
+  $\kappa_{eff}(M^{-1}PA)$ &$83.27$&$6\times10^{3}$&$1\times10^{6}$&$6\times10^{7}$\\
+\hline
+\end{tabular}
+\caption{Table with the condition number for various permeability contrasts between the layers, grid size of 32 x 32, $\sigma_1=1mD$.}
+\label{table:condn}
+\end{table}
+
+\textbf{Results}\\
+Table \ref{table:he} shows the number of iterations necessary to achieve convergence 
+for ICCG and DICCG, for various permeability contrasts between the layers\footnote{The * means
+that the solution is not achieved (from the plot of the solution), see Figure \ref{fig:solnr} for an example. Meanwhile, ** means that the solution is close to the solution obtained with a direct solver.}. \\
+The solution is not reached when the value of permeability is greater that $\sigma_2=10^{-3}$ for both methods (ICCG and DICCG). For the ICCG method the solution is completely different from the solution obtained with a linear solver, whereas for the DICCG the solution is similar, but not the same. The plot of the residual and the solution of the problem are presented in Figure \ref{fig:convhe1} and \ref{fig:solhe1} for a value of permeability $\sigma_2=10^{-3}$.\\
+As long as the correct solution is achieved ($\sigma_2=10^{-1},10^{-3}$), we note that the number of iterations increases when the contrast between the permeability layers increases for ICCG. For DICCG, we observe that we only need  one iteration despite the change of permeability contrast between the layers, as expected from theory (Lemma 2).\\
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}| p{1.5cm}|} 
+\hline
+ $\sigma_2$ (mD) & $10^{-1}$& $10^{-3}$ & $10^{-5}$ & $10^{-7}$\\
+   &  &  & & \\
+ \hline
+  ICCG  & 75& 110&22*&22*\\ 
+  DICCG  & 1 & 1& 10&4**\\ 
+ \hline
+\end{tabular}
+\caption{Table with the number of iterations for different contrasts in the permeability of the layers
+for the ICCG and DICCG methods.}
+\label{table:he}
+\end{table}
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.4\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{conv_he_1.jpg}
+\caption{Convergence for the heterogeneous problem, 64 x 64 grid cells,  $\sigma_2=10^{-3}mD$.}
+\label{fig:convhe1}
+\end{minipage}%
+\hspace{1pt}
+\begin{minipage}{.4\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{sol_he_1.jpg}
+\caption{Solution of the heterogeneous problem, 64 x 64 grid cells,$\sigma_2=10^{-3}mD$.}
+\label{fig:solhe1}
+\end{minipage}
+\end{figure}
+
+To better understand the cases when the solution is not reached, we study the error of the approximations.
+If we want the relative error $e=\frac{||\mathbf{x}-\mathbf{x}^k||_2}{||\mathbf{x}||_2}$, with $\mathbf{x}$ the true solution and $\mathbf{x}^k$ the approximation, to be less than $10^{-7}$, we need to choose a stopping criteria $(tol)$ such that $tol=e / \kappa_2(M^{-1}A)$ for the preconditioned system, and $tol=e  / \kappa_{eff}(M^{-1}PA)$ for the deflated and preconditoned system (see Apendix \ref{a1}).\\ The tolerance is presented in Table \ref{table:tol} for the ICCG and DICCG methods. We observe that the needed tolerance ($tol$) when $\sigma_2=10^{-5}mD, 10^{-7}mD$ is smaller than our choice ($tol= 10^{-11}$). As a consequence, we cannot expect to find a correct solution for these cases. 
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|  } 
+ \hline
+  $\sigma_2$ (mD) & $10^{-1}$& $10^{-3}$ & $10^{-5}$ & $10^{-7}$\\
+  \hline
+  $tol=\frac{e }{  \kappa(M^{-1}A)}$ &$5\times10^{-9}$&$1\times10^{-10}$&$1\times10^{-12}$&$1\times10^{-14}$\\
+   \hline
+ $tol=\frac{e}  { \kappa_{eff}(M^{-1}PA)}$ &$1\times10^{-8}$&$2\times10^{-10}$&$1\times10^{-12}$&$2\times10^{-14}$\\
+\hline
+\end{tabular}
+\caption{Table with the  tolerance for various permeability contrast between the layers, grid size of 32 x 32, $\sigma_1=1mD$.}
+\label{table:tol}
+\end{table}
+
+As we see from Table \ref{table:tol}, the tolerance needed when $\sigma_2=10^{-5}mD$ is of the order of $10^{-12}$. Therefore, if we use this tolerance we can reach the solution. Table \ref{table:tol1} shows the number of iterations necessary to achieve convergence for the ICCG, DICCG and DICCG$_d$ for a given tolerance (Tol solver). For the first deflation method (DICCG), the deflation vectors are the snapshots obtained with ICCG using the tolerance showed in the table (Tol. snapshots). For the second deflation method (DICCG$_d$), the deflation vectors are the snapshots obtained with a direct solver. The solution obtained with all the methods is visually compared with the solution obtained with a direct solver. \\
+For ICCG, the solution obtained in the first two cases is similar to the expected solution but is not the same. For DICCG, in the first case, the solution is reached after eleven iterations, whereas for the DICCG$_d$ it is reached within one iteration. If we increase the accuracy of the snapshots (Case 2) we reach the correct solution for DICCG in one iteration (the dependence on the accuracy of the snapshots for the DICCG method is studied for the SPE10 model in the next section). If we increase the accuracy of the solvers (Case 3), the solution is also reached, but we note that for the deflation methods the number of iterations increases. 
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}| } 
+\hline
+Case &1&2&3\\ 
+\hline
+Tol snapshots &$1\times 10^{-12}$&$1\times10^{-14}$&$1\times10^{-14}$\\
+   \hline
+Tol solver &$1\times10^{-12}$&$1\times10^{-12}$&$1\times10^{-13}$\\
+
+\hline
+ICCG &$55^{**}$&$55^{**}$&$94$\\
+   \hline
+DICCG&$11$&$1$&$2$\\
+\hline
+DICCG$_d$ & $1$& $1$ & $2$\\
+   \hline
+\end{tabular}
+\caption{Number of iterations for ICCG, DICCG for a layered problem, $\sigma_1=1mD$, $\sigma_2=10^{-5}mD$, grid size of 64x 64, .}
+\label{table:tol1}
+\end{table}
+\newpage
+\textbf{\large Case 2}\\
+\normalsize
+\begin{wrapfigure}{r}{5cm}
+\includegraphics[width=4.5cm,height=4.5cm,keepaspectratio]
+{perm_he_2.jpg}
+\caption{ Heterogeneous permeability.}\label{fig:hep1}
+\end{wrapfigure}
+The conditions are the same as in the Case 2 for homogeneous permeability. For this problem only a grid of
+$nx = ny = 64$ elements is investigated. The deflation vectors used in this case are 4 ($\mathbf{z}_1$-$\mathbf{z}_4$) and 5 ($\mathbf{z}_1$-$\mathbf{z}_5$).\\
+The snapshots and the solutions are obtained with a tolerance of $10^{-11}$. \\\\
+\textbf{Results}\\
+Table \ref{table:he2} shows the number of iterations necessary to achieve convergence 
+for ICCG and DICCG with 4 and 5 deflation vectors. The tolerance is $10^{-11}$ for the snapshots for the original 
+problem. The plot of the residual and the solution of the problem are presented in Figure \ref{fig:convhe2} and \ref{fig:solhe2} for the ICCG and DICCG methods, the last one with 4 deflation vectors. Figure \ref{fig:solnr} shows an example when the solution is not the same with ICCG or DICCG and a direct solver.\\
+As in the Case 1, we note that the solution is not achieved when the permeability coefficient $\sigma_2$ is smaller than $10^{-3}$. Studying solely the correct solutions, for the ICCG method, the number of iterations increases as the contrast in the permeability increases. For the DICCG method, with for deflation vectors, the convergence is achieved in one iteration as expected from theory (Lemma 2). If we use 5 deflation vectors, although the convergence is achieve in 1 iteration when the permeability coefficient is $\sigma_2=10^{-1}$, it is not the case when it is $\sigma_2=10^{-3}$, as expected. This might be caused by some errors related to the choice of deflation vectors. Therefore is important to use only the correct number of deflation vectors. Techniques such as Proper Orthogonal Decomposition (POD) \cite{Astrid11,Mark06} could help us to chose the correct set of deflation vectors.\\
+\newpage
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{2.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}| p{1.5cm}|} 
+\hline
+$\sigma_2$& $10^{-1}$ &$10^{-3}$  & $10^{-5}$ &$10^{-7}$\\
+
+   &  &  & & \\
+ \hline
+  ICCG  & 90& 131&65*&64*\\ 
+  DICCG$_4$  & 1 &1& 1*&1*\\ 
+ DICCG$_5$  & 1 &500*& 500*&500*\\ 
+ \hline
+\end{tabular}
+\caption{Table with the number of iterations for different contrast in the permeability of the layers
+for the ICCG and DICCG methods, tolerance of $10^{-11}$, snapshots $10^{-11}$. DICCG$_4$ is the solution with 4 deflation vectors and DICCG$_5$ is the solution with 5 deflation vectors. }
+\label{table:he2}
+\end{table}
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.5\textwidth}
+ \centering
+\includegraphics[width=5cm,height=5cm,keepaspectratio]
+{conv_he_2.jpg}
+\caption{Convergence for the heterogeneous problem, 64 x 64 grid cells, $\sigma_2=10^{-3}$.}
+\label{fig:convhe2}
+\end{minipage}%
+\hspace{3 pt}
+\begin{minipage}{.45\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{sol_he_2.jpg}
+\caption{Solution of the heterogeneous problem, 64 x 64 grid cells, $\sigma_2=10^{-3}$.}
+\label{fig:solhe2}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.5\textwidth}
+ \centering
+\includegraphics[width=1.8cm,height=1.9cm]
+{solbs.jpg}
+\end{minipage}%
+\hspace{3 pt}
+\begin{minipage}{.45\textwidth}
+ \centering
+\includegraphics[width=4cm,height=4cm,keepaspectratio]
+{solhe-7.jpg}
+\end{minipage}
+\caption{Example of solution not reached, heterogeneous problem $\sigma_2=10^{-7}$, left direct solver, right ICCG and DICCG, 64 x 64 grid cells.}\label{fig:solnr}
+\end{figure}
+    
+\newpage
+
+\subsubsection*{SPE 10 model (1 layer)}
+This model has large variations in the permeability coefficients.
+It contains 60 x 220 x 85 cells, for these studies only one layer (2nd) is used (60 x 220 x 1 cells).
+\\This model has 5 sources or wells, four producers in the corners (negative) and one injector in the center (positive).
+\\The snapshots are obtained solving the system with different well
+configurations (\emph{Configuration 2}). The first 4 snapshots are used as deflation vectors. The dependence of the DICCG method on the accuracy of the snapshots is investigated. Snapshots are obtained with different accuracy,
+the values of tolerance used are
+$10 ^{-1}$, $10 ^{-3}$, $10 ^{-5}$, and $10 ^{-7}$. The original system is solved with an accuracy of $10^{-7}$.\\ Different grid sizes are studied: 16 x 56, 30 x 110, 46 x 166 and 60 x 220.
+\\The permeability is upscaled
+averaging the permeability in each grid using the function \emph{sampleFromBox} from MRST.
+The permeability of the coarser grid (16 x 56 cells) is shown in Figure \ref{fig:perm}.
+The permeability contrast for the diverse grid size problems is shown in Table \ref{table:permgs}. From this table, we observe that the contrast in the permeability for different grid sizes varies slightly, moreover, the order
+of magnitude remains the same for all the cases.\\
+The condition number for the coarse grid problem (16 x 56) is studied in Table \ref{table:condnspe}. We observe an important reduction in the condition number for the preconditioned the system, and a further reduction when the system is deflated.\\
+\begin{figure}[!h]
+\centering
+\subfigure[16 x 56 grid cells]{
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{perm_layer_2.jpg}
+} \
+\subfigure[60 x 220 grid cells]{
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{perm_layer_22.jpg}
+}
+\caption{Permeability field, 16 x 56 and 60 x 220 grid cells.}\label{fig:perm}
+\end{figure}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{2.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|  } 
+ \hline
+  Grid size & 16 x 56 & 30 x 110 & 46 x 166 & 60 x 220\\
+  \hline
+  Contrast ($\times10^{7}$) & 1.04 & 2.52&  2.6&  2.8\\ 
+  &&&&\\
+\hline
+\end{tabular}
+\caption{Table with the contrast of permeabilities for
+different grid sizes.}
+\label{table:permgs}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ |p{2.3cm}|p{2.3cm}|  } 
+\hline
+   Condition number &value\\ 
+   \hline
+   $\kappa(A)$ &$2.2\times10^{6}$\\ 
+   \hline
+   $\kappa(M^{-1}A)$ &377\\ 
+   \hline
+ $\kappa_{eff}(M^{-1}PA)$  &82.7\\
+\hline
+\end{tabular}
+\caption{Table with the condition number of the SPE10 model, grid size of 16 x 56.}
+\label{table:condnspe}
+\end{table}
+The number of iterations neccesary to achieve convergence with the ICCG and DICCG methods for different grid sizes and different accuracy for the snapshots are presented in Table \ref{table:itgrid}. The convergence and the solution for the ICCG and DICCG methods with a tolerance for the snapshots of $10^{-7}$ are presented in Figure \ref{fig:convspe} and Figure \ref{fig:solspe}.\\For the ICCG method, the necessary iterations to reach convergence increases as the size of the grid increases. We note that the accuracy of the snapshots is important for the DICCG method. When the accuracy is low, the DICCG method beahaves almost as the ICCG method, as the accuracy increases, the number of iterations diminishes. We observe that, if we use the same accuracy for the snapshotts and the solver, $10^{-7}$, the solution is reached within one iteration, as expected from theory (Lemma 2).  \\\\
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|p{1.5cm} |p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|  } 
+ \hline
+  Tol&Method  & 16 x 56 & 30 x 110 & 46 x 166 & 60 x 220\\
+  \hline
+  &ICCG                & 34 & 73&  126&  159\\ 
+  &&&&&\\
+  \hline
+$10 ^{-1}$ & DICCG$_4$ & 33 & 72&  125 &  158 \\ 
+
+  \hline
+ $10 ^{-3}$ &DICCG$_4$& 18 & 38&  123&  151 \\ 
+  \hline
+
+$10 ^{-5}$ &  DICCG$_4$& 11 & 21&  27 &  55\\ 
+   \hline
+
+ $10 ^{-7}$  &DICCG$_4$ & 1 & 1&  1 &  1 \\ 
+
+\hline
+\end{tabular}
+\caption{Table with the number of iterations for ICCG and DICCG, various tolerance for the snapshots,
+various grid sizes.}
+\label{table:itgrid}
+\end{table}
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.5\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{conv_deftol-7_5_5.jpg}
+\caption{Convergence for the SPE10 problem, 16 x 56 grid cells, accuracy of the snapshots $10 ^{-7}$.}
+\label{fig:convspe}
+\end{minipage}%
+\hspace{4mm}
+\begin{minipage}{.45\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{sol1.jpg}
+\caption{Solution of the SPE10 benchmark, 16 x 56 grid cells, 2nd layer, accuracy of the snapshots $10 ^{-7}$.}
+\label{fig:solspe}
+\end{minipage}
+\end{figure}
+\newpage
+\subsection*{SPE 10 complete}
+We approximate the solution for the complete SPE10 benchmark (60 x 220 x 65) with the ICCG and DICCG methods (see Figure \ref{fig:permspec}).
+We use four deflation vectors, $z_1-z_4$ from the  $Configuration$ $2$.
+The accuracy for the snapshots and the solution is $10 ^{-11}$. \\
+Convergence is achieved within one iteration for DICCG (see Table \ref{table:itspec}),
+as expected from theory (Lemma 2). We note a significant improvement with respect to ICCG that needs 1029 iterations to achieve the solution.\\
+The convergence plot is presented in Figure \ref{fig:convspec} and the solution in \ref{fig:solspec}.\\
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|p{1.5cm} |p{2cm}  |} 
+ \hline
+ Method  & Iterations \\
+  \hline
+  ICCG                & 1029\\ 
+  \hline
+DICCG$_4$ & 1\\ 
+
+\hline
+\end{tabular}
+\caption{Number of iterations for the SPE10 model (85 layers)
+for the ICCG and DICCG methods, tolerance of the snapshots and solvers $10^{-11}$.}
+\label{table:itspec}
+\end{table}
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.5\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{perm_layer_.jpg}
+\caption{SPE10 benchmark, permeability.}
+\label{fig:permspec}
+\end{minipage}%
+\hspace{4mm}
+\begin{minipage}{.45\textwidth}
+ \centering
+\includegraphics[width=6cm,height=6cm,keepaspectratio]
+{conv_deftol-7_5_5.jpg}
+\caption{Convergence for the SPE10 model, 85 layers, accuracy of the snapshots $10 ^{-11}$.}
+\label{fig:convspec}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{minipage}{.6\textwidth}
+ \centering
+\includegraphics[width=7cm,height=7cm,keepaspectratio]
+{SPE10_85_sol.jpg}
+\caption{Solution of the SPE10 model (85 layers)
+with ICCG and DICCG, tolerance of the snapshots and solvers $10^{-11}$.}
+\label{fig:solspec}
+\end{minipage}%
+\hspace{4mm}
+\end{figure}
+
+
+% \begin{figure}[!htb]
+%   \centering
+%   \includegraphics[width=0.6\textwidth]{....eps}
+%   \caption{...}
+% \end{figure}
+
+\section{Conclusions}
+
+A proposal to select physics-based deflation vectors for the Deflated Conjugated Gradient 
+preconditioned with Incomplete Cholesky (DICCG) method was studied. Results show that the 
+choice of deflation vectors is important for a good performance of the method. They also show 
+that the accuracy of the snapshots used as deflation vectors is essential for the correct 
+performance of the DICCG method. For the layered problem, we note that the contrast between 
+the layers modifies the condition number and demands a higher accuracy for the solvers. 
+When the desired accuracy is not satisfied, the solution is not reached. For the cases when 
+the correct accuracy is used, the DICCG method reaches the solution within one iteration. 
+Results also expose that the behaviour of the solver does not depend on the grid size 
+(SPE 10 example) or the contrast (Heterogeneous permeability example).
+This is the first sentence of the conclusions.
+
+\section{Acknowledgements (Optional)}
+
+This is the first sentence of the acknowledgements.
+
+% \begin{thebibliography}{6pt}
+%   \bibitem[{<reference>}]{<cite>} ...
+% \end{thebibliography}
+%
+% or
+%
+% \bibliography{...}
+
+\end{document} 

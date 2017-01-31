@@ -1,4 +1,4 @@
-function [x,flag,relres,iter,resvec] = pcg(A,b,tol,maxit,M1,M2,x0,varargin)
+function [x,flag,relres,iter,resvec] = pcg_1(A,b,tol,maxit,M1,M2,x0,varargin)
 %PCG   Preconditioned Conjugate Gradients Method.
 %   X = PCG(A,B) attempts to solve the system of linear equations A*X=B for
 %   X. The N-by-N coefficient matrix A must be symmetric and positive
