@@ -24,7 +24,7 @@ for k = 11
     k
 tol = 10^-k;
 
-for per=[5]
+for per=[1]
    
 close all
 per
@@ -63,11 +63,15 @@ for i=1:sz
 
     Z((1:sz)+sz*(i-1),i)=1;
 end
+
 %Z=eye(sz*sz);
 
 for i=1:2:sz
  rock.perm(1+lsize*(i-1):lsize*i)  = repmat(10^(-per), [lsize, 1]);
 end
+
+
+
 
 z1s=size(Z)
 
@@ -140,9 +144,9 @@ display(fluid);
 %% Define well locations, 15 wells
 
 for s=5
-    well(1)=-1;
-    well(2)=1;
- xi=rand(nx*ny,1);
+    well(1)=2;
+    well(2)=-2;
+ xi=ones(nx*ny,1)* barsa();
 
 wtype    = {'bhp', 'bhp'};
 wtarget  = [well(1),   well(2)] .* barsa();
@@ -150,7 +154,8 @@ wrad     = [0.125, 0.125] .* meter;
 wloc     = [  nxi,   nx ;
               nyi,   ny ];
 wname    = {'W1', 'W2'};
-sgn      = [ 1 ,  1 ];
+sgn      = [ 1 ,  -1 ];
+
 W = [];        
 for w = 1 : numel(wtype),
    W = verticalWell(W, G, rock, wloc(1,w), wloc(2,w), [], ...
@@ -158,6 +163,15 @@ for w = 1 : numel(wtype),
                     'Radius', wrad(w), 'Name', wname{w}, ...
                     'Sign', sgn(w), 'InnerProduct', 'ip_tpf');
 end
+% nw = length(well);
+% sz2=size(Z,2);
+% for nd=Lx*Ly+1:Lx*Ly+nw
+%     nd
+%     sz2+nd-Lx*Ly+1
+%     Z(nd,sz2+nd-Lx*Ly+1)=0;
+%     size(Z)
+%     pause
+% end
 
 figure
   hp=plotCellData(G, rock.perm);
@@ -176,8 +190,9 @@ sol = initState(G, W, 0);
  % solver = PCG_ICSolverAD('tolerance', tol,'maxIterations', 1000);
  %return
  %Z=A1;
- sz1=size(Z)
+ %sz1=size(Z)
  %Z=1;
+ 
 solver = DPCG_ICSolverAD('tolerance', tol,'maxIterations', 1000, 'Z',Z);
  %solver = BackslashSolverAD();
 % pressureSolver = BackslashSolverAD();
@@ -186,7 +201,7 @@ solver = DPCG_ICSolverAD('tolerance', tol,'maxIterations', 1000, 'Z',Z);
 
 fn = @(A, b) solver.solveLinearSystem(A, b);
 tic
-psolve = @(state) incompTPFA_g(state, G, hT, fluid, 'wells', W,'MatrixOutput',true,'LinSolve', fn);
+psolve = @(state) incompTPFA(state, G, hT, fluid, 'wells', W,'MatrixOutput',true,'LinSolve', fn);
 
 sol= psolve(sol);
 toc

@@ -73,9 +73,9 @@ if strcmp(atype,'matrix')
     if ~isequal(size(b),[m,1])
         error(message('MATLAB:dpcg:RSHsizeMatchCoeffMatrix', m));
     end
-    if ~isequal(size(Z,1),m)
-        error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
-    end
+%     if ~isequal(size(Z,1),m)
+%         error(message('MATLAB:dpcg:ZsizeMatchCoeffMatrix', m));
+%     end
 else
     m = size(b,1);
     n = m;
@@ -101,9 +101,26 @@ end
 if (nargin < 5) || isempty(maxit)
     maxit = min(n,20);
 end
-
-
-
+if size(A) == size(Z)
+    Z1=Z;
+else
+    Z1=Z;
+    for j=(size(Z,1)+1):size(A,1)
+        rt=j-size(Z,1);
+        
+    for i=1:(size(A,1)-size(Z,2))
+        if rt==i
+    Z1(j,i)=0;
+        end
+    end
+    end
+end
+Z=Z1;
+size(A)
+size(Z)
+full(A)
+full(Z)
+b
 E = Z' * A * Z;
 EI = sparse(inv(E));
 % Check for all zero right hand side vector => all zero solution

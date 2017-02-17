@@ -26,6 +26,7 @@ else
     end
     end
 end
+full(a)
 z=eye(size(a));
 full(Z1)
   z=Z1;
