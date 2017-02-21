@@ -69,8 +69,8 @@ disp(model)
 
 right = jj > 2;
 sW = ones(G.cells.num, 1);
-%sW(right) = 0;
-s = [sW, 1 - sW];
+sW(right) = 0;
+s = [sW, 1 - sW]
 
 % Finally set up the state
 state = initResSol(G, 100*barsa, s);
